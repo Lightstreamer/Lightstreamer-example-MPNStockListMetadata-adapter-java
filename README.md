@@ -91,12 +91,12 @@ If you want to install a version of the *Stock-List Demo* in your local Lightstr
 * Download *Lightstreamer Server Version 6.0 or greater* (Lightstreamer Server comes with a free non-expiring demo license for 20 connected users) from [Lightstreamer Download page](http://www.lightstreamer.com/download.htm), and install it, as explained in the `GETTING_STARTED.TXT` file in the installation home directory.
 * Make sure that Lightstreamer Server is not running.
 
-### Installing the adapter
+### Installing the Adapter
 
 * Get the `deploy.zip` file of the [Metadata Adapter latest release](https://github.com/Weswit/Lightstreamer-example-StockListMetadata-adapter-java/releases), unzip it, and copy the `StockList` folder into the `adapters` folder of your Lightstreamer Server installation.
 * Get the `deploy.zip` file of the [Data Adapter latest release](https://github.com/Weswit/Lightstreamer-example-StockList-adapter-java/releases), unzip it, and copy the content of `StockList/lib` folder into the `adapters/StockList/lib` folder of your Lightstreamer Server installation.
 
-### Enabling the MPN module
+### Enabling the MPN Module
 
 The Mobile Push Notifications (MPN) module of Lightstreamer is not enabled by default and requires configuration.
 
@@ -104,7 +104,7 @@ The Mobile Push Notifications (MPN) module of Lightstreamer is not enabled by de
 * Find the `<mpn>` tag.
 * Set the `<enabled>` tag to `Y`.
 
-### Configuring the MPN service provider
+### Configuring the MPN Service Provider
 
 The MPN module currently supports two MPN providers:
 
@@ -113,7 +113,7 @@ The MPN module currently supports two MPN providers:
 
 Depending on the target operating system of your app, you may need to configure the `apns_notifier_conf.xml` file under `conf/mpn/apns`, `gcm_notifier_conf.xml` under `conf/mpn/gcm`, or both.
 
-#### Configuring the APNs provider
+#### Configuring the APNs Provider
 
 For the APNs provider, you need the following material in order to configure it correctly:
 
@@ -139,7 +139,7 @@ Once you have the required material, add the following segment to the `apns_noti
 
 Replace `your.app.id`, `your_client_certificate.p12` and `your certificate password` with the corresponding informations. The certificate file must be located in the same folder of `apns_notifier_conf.xml`, unless an absolute path is specified. The `<service_level>` tag must be set accordingly to your client certificate type: `development` (sandbox) or `production`. For more informations on the meaning of these tags please consult the `apns_notifier_conf.xml` itself or the *Mobile Push Notifications* section of the *General Concepts* document (available under `DOCS-SDKs` in your Lightstreamer Server installation).
 
-#### Configuring the GCM provider
+#### Configuring the GCM Provider
 
 For the GCM provider, you need the following material:
 
@@ -163,7 +163,7 @@ Once you have the required material, add the following segment to the `gcm_notif
 
 Replace `your-API-key` with the corresponding information. You will need the GMC sender ID later. For more informations on the meaning of these tags please consult the `gcm_notifier_conf.xml` itself or the *Mobile Push Notifications* section of the *General Concepts* document (available under `DOCS-SDKs` in your Lightstreamer Server installation).
 
-### Configuring the MPN database
+### Configuring the MPN Database
 
 The MPN module requires a working SQL database in order to store persistent data regarding devices and subscriptions. The database configuration must be specified in the `hibernate.cfg.xml` file under `conf/mpn` in your Lightstreamer Server installation.
 
@@ -186,7 +186,7 @@ If you have a working database instance, follow these steps:
 
 A complete guide on configuring the Hibernate JDBC connection may be found [here](https://docs.jboss.org/hibernate/orm/4.2/manual/en-US/html/ch03.html#configuration-hibernatejdbc) (and [here](https://docs.jboss.org/hibernate/orm/4.2/manual/en-US/html/ch03.html#configuration-optional-dialects) is a list of available SQL dialects). Avoid introducing optional parameters, like those from tables 3.3 - 3.7, if they are not already present in the `hibernate.cfg.xml` file, as they may have not been tested and may lead to unexpected behavior. Do it only if you know what you are doing.
 
-### Compiling and building the clients
+### Compiling and Building the Clients
 
 You may download the source code for the MPN Stock-List Demo iOS Client and MPN Stock-List Demo Android Client here:
 
@@ -211,7 +211,7 @@ For the Android Client:
 Note that to receive push notifications you need a Google account configured on the system. In case the emulator is used a "Google APIs"
 OS image has to be used.
 
-### Finishing installation
+### Finishing Installation
 
 Done all this, the installation is finished and ready to be tested:
 
@@ -253,7 +253,7 @@ To build your own version of `LS_StockListDemo_MetadataAdapter.jar`, instead of 
 ### Related Projects
 
 * [Lightstreamer - Reusable Metadata Adapters - Java Adapter](https://github.com/Weswit/Lightstreamer-example-ReusableMetadata-adapter-java)
-* [Lightstreamer - Portfolio Demo - Java Adapter](https://github.com/Weswit/Lightstreamer-example-Portfolio-adapter-java)
+* [Lightstreamer - Stock-List Demo - Java Adapter](https://github.com/Weswit/Lightstreamer-example-StockList-adapter-java)
 
 ## Lightstreamer Compatibility Notes
 
