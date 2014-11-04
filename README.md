@@ -227,12 +227,12 @@ If everything is correct, you should receive the push notification within a few 
 To build your own version of `LS_StockListDemo_MetadataAdapter.jar`, instead of using the one provided in the `deploy.zip` file from the [Install](https://github.com/Weswit/Lightstreamer-example-StocklistMetadata-adapter-java#install) section above, follow these steps:
 
 * Download this project.
-* Get the `ls-adapter-interface.jar` file from the `/lib` folder of the [latest Lightstreamer distribution](http://www.lightstreamer.com/download), and copy it into the `lib` directory of this project.
-* Get the `log4j-1.2.15.jar` file form the `/shared/lib` folder of the [latest Lightstreamer distribution](http://www.lightstreamer.com/download), and copy it into the `lib` directory of this project.
+* Get the `ls-adapter-interface.jar` file from the `/lib` folder of the [latest Lightstreamer distribution](http://www.lightstreamer.com/download), and copy it into the `lib` folder.
+* Get the `log4j-1.2.17.jar` file from [Apache log4j](https://logging.apache.org/log4j/1.2/) and copy it into the `lib` folder.
 * Create the jar `LS_StockListDemo_MetadataAdapter.jar` with commands like these:
 
 ```sh
- >javac -source 1.7 -target 1.7 -nowarn -g -classpath lib/log4j-1.2.15.jar;lib/ls-adapter-interface.jar -sourcepath src -d tmp_classes src/stocklist_demo/adapters/StockQuotesMetadataAdapter.java
+ >javac -source 1.7 -target 1.7 -nowarn -g -classpath lib/log4j-1.2.17.jar;lib/ls-adapter-interface.jar -sourcepath src -d tmp_classes src/stocklist_demo/adapters/StockQuotesMetadataAdapter.java
 
  >jar cvf LS_StockListDemo_MetadataAdapter.jar -C tmp_classes src
 ```
