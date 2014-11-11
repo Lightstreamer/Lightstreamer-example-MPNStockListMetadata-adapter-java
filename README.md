@@ -93,7 +93,7 @@ If you want to install a version of the *Stock-List Demo* in your local Lightstr
 
 ### Installing the Adapter
 
-* Get the `deploy.zip` file of the [Metadata Adapter latest release](https://github.com/Weswit/Lightstreamer-example-StockListMetadata-adapter-java/releases), unzip it, and copy the `StockList` folder into the `adapters` folder of your Lightstreamer Server installation.
+* Get the `deploy.zip` file of the [Metadata Adapter latest release](https://github.com/Weswit/Lightstreamer-example-MPNStockListMetadata-adapter-java/releases), unzip it, and copy the `StockList` folder into the `adapters` folder of your Lightstreamer Server installation.
 * Get the `deploy.zip` file of the [Data Adapter latest release](https://github.com/Weswit/Lightstreamer-example-StockList-adapter-java/releases), unzip it, and copy the content of `StockList/lib` folder into the `adapters/StockList/lib` folder of your Lightstreamer Server installation.
 
 ### Enabling the MPN Module
@@ -224,7 +224,7 @@ If everything is correct, you should receive the push notification within a few 
 
 ## Build
 
-To build your own version of `LS_StockListDemo_MetadataAdapter.jar`, instead of using the one provided in the `deploy.zip` file from the [Install](https://github.com/Weswit/Lightstreamer-example-StocklistMetadata-adapter-java#install) section above, follow these steps:
+To build your own version of `LS_StockListDemo_MetadataAdapter.jar`, instead of using the one provided in the `deploy.zip` file from the [Install](https://github.com/Weswit/Lightstreamer-example-MPNStocklistMetadata-adapter-java#install) section above, follow these steps:
 
 * Download this project.
 * Get the `ls-adapter-interface.jar` file from the `/lib` folder of the [latest Lightstreamer distribution](http://www.lightstreamer.com/download), and copy it into the `lib` folder.
