@@ -23,7 +23,7 @@ See the source code comments for further details.
 
 ### The Adapter Set Configuration
 
-The Data Adapter functionalities are absolved by the `StockQuotesDataAdapter` in [Lightstreamer - Stock-List Demo - Java Adapter](https://github.com/Weswit/Lightstreamer-example-StockList-adapter-java), a full implementation of a Data Adapter, made available also in the Lightstreamer distribution.
+The Data Adapter functionalities are absolved by the `StockQuotesDataAdapter`, a full implementation of a Data Adapter, explained in [Lightstreamer - Stock-List Demo - Java Adapter](https://github.com/Weswit/Lightstreamer-example-StockList-adapter-java).
 
 This Adapter Set is configured and will be referenced by the clients as `DEMO`.
 
