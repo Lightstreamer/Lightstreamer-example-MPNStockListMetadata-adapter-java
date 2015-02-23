@@ -33,7 +33,7 @@ The `adapters.xml` file for the Stock-List Demo, should look like:
 <?xml version="1.0"?>
 
 <!-- Mandatory. Define an Adapter Set and sets its unique ID. -->
-<adapters_conf id="STOCKLISTDEMO">
+<adapters_conf id="DEMO">
 
     <!-- Mandatory. Define the Metadata Adapter. -->
     <metadata_provider>
@@ -82,6 +82,9 @@ The `adapters.xml` file for the Stock-List Demo, should look like:
 </adapters_conf>
 ```
 
+<i>NOTE: not all configuration options of an Adapter Set are exposed by the file suggested above. 
+You can easily expand your configurations using the generic template, `DOCS-SDKs/sdk_adapter_java_inprocess/doc/adapter_conf_template/adapters.xml`, as a reference.</i><br>
+<br>
 Please refer to the *General Concepts* document (available under `DOCS-SDKs` in your Lightstreamer Server installation) for more details about Lightstreamer Adapters.<br>
 
 ## Install
