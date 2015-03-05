@@ -35,6 +35,8 @@ The `adapters.xml` file for the Stock-List Demo, should look like:
 <!-- Mandatory. Define an Adapter Set and sets its unique ID. -->
 <adapters_conf id="DEMO">
 
+    <metadata_adapter_initialised_first>Y</metadata_adapter_initialised_first>
+
     <!-- Mandatory. Define the Metadata Adapter. -->
     <metadata_provider>
 
@@ -70,12 +72,6 @@ The `adapters.xml` file for the Stock-List Demo, should look like:
 
         <!-- Mandatory. Java class name of the adapter. -->
         <adapter_class>stocklist_demo.adapters.StockQuotesDataAdapter</adapter_class>
-
-        <!-- Optional for StockQuotesDataAdapter.
-             Configuration file for the Adapter's own logging.
-             Logging is managed through log4j. -->
-        <param name="log_config">adapters_log_conf.xml</param>
-        <param name="log_config_refresh_seconds">10</param>
 
     </data_provider>
 
