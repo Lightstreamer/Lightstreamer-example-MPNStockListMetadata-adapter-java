@@ -2,7 +2,7 @@
 
 <!-- START DESCRIPTION lightstreamer-example-mpnstocklistmetadata-adapter-java -->
 
-This project includes the resources needed to develop a Metadata Adapter for the [Lightstreamer - MPN Stock-List Demo - iOS Client](https://github.com/Weswit/Lightstreamer-example-MPNStockList-client-ios#lightstreamer---mpn-stock-list-demo---ios-client) and the [Lightstreamer - MPN Stock-List Demo - Android Client](https://github.com/Weswit/Lightstreamer-example-MPNStockList-client-android#lightstreamer---mpn-stock-list-demo---android-client) that is pluggable into Lightstreamer Server.<br>
+This project includes the resources needed to develop a Metadata Adapter for the [Lightstreamer - MPN Stock-List Demo - iOS Client](https://github.com/Lightstreamer/Lightstreamer-example-MPNStockList-client-ios#lightstreamer---mpn-stock-list-demo---ios-client) and the [Lightstreamer - MPN Stock-List Demo - Android Client](https://github.com/Lightstreamer/Lightstreamer-example-MPNStockList-client-android#lightstreamer---mpn-stock-list-demo---android-client) that is pluggable into Lightstreamer Server.<br>
 The Stock-List demos simulate a market data feed and front-end for stock quotes. They show a list of stock symbols and updates prices and other fields displayed on the page in real-time. Both clients support Mobile Push Notifications (MPN).<br>
 
 ## Details
@@ -15,7 +15,7 @@ The MPN Stock-List Metadata Adapter is comprised of one Java class.
 
 #### StockQuotesMetadataAdapter
 
-Implements the MetadataProvider interface to handle the communication with Lightstreamer Kernel, and extends the [LiteralBasedProvider](https://github.com/Weswit/Lightstreamer-example-ReusableMetadata-adapter-java). The code shows a few best practices to ensure safety of Mobile Push Notifications (MPN) activity.
+Implements the MetadataProvider interface to handle the communication with Lightstreamer Kernel, and extends the [LiteralBasedProvider](https://github.com/Lightstreamer/Lightstreamer-example-ReusableMetadata-adapter-java). The code shows a few best practices to ensure safety of Mobile Push Notifications (MPN) activity.
 
 See the source code comments for further details.
 
@@ -23,7 +23,7 @@ See the source code comments for further details.
 
 ### The Adapter Set Configuration
 
-The Data Adapter functionalities are absolved by the `StockQuotesDataAdapter`, a full implementation of a Data Adapter, explained in [Lightstreamer - Stock-List Demo - Java Adapter](https://github.com/Weswit/Lightstreamer-example-StockList-adapter-java).
+The Data Adapter functionalities are absolved by the `StockQuotesDataAdapter`, a full implementation of a Data Adapter, explained in [Lightstreamer - Stock-List Demo - Java Adapter](https://github.com/Lightstreamer/Lightstreamer-example-StockList-adapter-java).
 
 This Adapter Set is configured and will be referenced by the clients as `DEMO`.
 
@@ -99,8 +99,8 @@ If you want to install a version of the *Stock-List Demo* in your local Lightstr
 
 ### Installing the Adapter
 
-* Get the `deploy.zip` file of the [Metadata Adapter latest release](https://github.com/Weswit/Lightstreamer-example-MPNStockListMetadata-adapter-java/releases), unzip it, and copy the `StockList` folder into the `adapters` folder of your Lightstreamer Server installation.
-* Get the `deploy.zip` file of the [Data Adapter latest release](https://github.com/Weswit/Lightstreamer-example-StockList-adapter-java/releases), unzip it, and copy the content of `StockList/lib` folder into the `adapters/StockList/lib` folder of your Lightstreamer Server installation.
+* Get the `deploy.zip` file of the [Metadata Adapter latest release](https://github.com/Lightstreamer/Lightstreamer-example-MPNStockListMetadata-adapter-java/releases), unzip it, and copy the `StockList` folder into the `adapters` folder of your Lightstreamer Server installation.
+* Get the `deploy.zip` file of the [Data Adapter latest release](https://github.com/Lightstreamer/Lightstreamer-example-StockList-adapter-java/releases), unzip it, and copy the content of `StockList/lib` folder into the `adapters/StockList/lib` folder of your Lightstreamer Server installation.
 
 ### Enabling the MPN Module
 
@@ -196,8 +196,8 @@ A complete guide on configuring the Hibernate JDBC connection may be found [here
 
 You may download the source code for the MPN Stock-List Demo iOS Client and MPN Stock-List Demo Android Client here:
 
-* [Lightstreamer - MPN Stock-List Demo - iOS Client](https://github.com/Weswit/Lightstreamer-example-MPNStockList-client-ios)
-* [Lightstreamer - MPN Stock-List Demo - Android Client](https://github.com/Weswit/Lightstreamer-example-MPNStockList-client-android)
+* [Lightstreamer - MPN Stock-List Demo - iOS Client](https://github.com/Lightstreamer/Lightstreamer-example-MPNStockList-client-ios)
+* [Lightstreamer - MPN Stock-List Demo - Android Client](https://github.com/Lightstreamer/Lightstreamer-example-MPNStockList-client-android)
 
 Each project must be modified in order to work with your app ID and certificate (for APNs) or your sender ID (for GCM), and to point to your Lightstreamer Server.
 
@@ -230,7 +230,7 @@ If everything is correct, you should receive the push notification within a few 
 
 ## Build
 
-To build your own version of `LS_StockListDemo_MetadataAdapter.jar`, instead of using the one provided in the `deploy.zip` file from the [Install](https://github.com/Weswit/Lightstreamer-example-MPNStocklistMetadata-adapter-java#install) section above, follow these steps:
+To build your own version of `LS_StockListDemo_MetadataAdapter.jar`, instead of using the one provided in the `deploy.zip` file from the [Install](https://github.com/Lightstreamer/Lightstreamer-example-MPNStocklistMetadata-adapter-java#install) section above, follow these steps:
 
 * Download this project.
 * Get the `ls-adapter-interface.jar` file from the `/lib` folder of the [latest Lightstreamer distribution](http://www.lightstreamer.com/download), and copy it into the `lib` folder.
@@ -251,15 +251,15 @@ To build your own version of `LS_StockListDemo_MetadataAdapter.jar`, instead of 
 
 <!-- START RELATED_ENTRIES -->
 
-* [Lightstreamer - MPN Stock-List Demo - iOS Client](https://github.com/Weswit/Lightstreamer-example-MPNStockList-client-ios)
-* [Lightstreamer - MPN Stock-List Demo - Android Client](https://github.com/Weswit/Lightstreamer-example-MPNStockList-client-android)
+* [Lightstreamer - MPN Stock-List Demo - iOS Client](https://github.com/Lightstreamer/Lightstreamer-example-MPNStockList-client-ios)
+* [Lightstreamer - MPN Stock-List Demo - Android Client](https://github.com/Lightstreamer/Lightstreamer-example-MPNStockList-client-android)
 
 <!-- END RELATED_ENTRIES -->
 
 ### Related Projects
 
-* [Lightstreamer - Reusable Metadata Adapters - Java Adapter](https://github.com/Weswit/Lightstreamer-example-ReusableMetadata-adapter-java)
-* [Lightstreamer - Stock-List Demo - Java Adapter](https://github.com/Weswit/Lightstreamer-example-StockList-adapter-java)
+* [Lightstreamer - Reusable Metadata Adapters - Java Adapter](https://github.com/Lightstreamer/Lightstreamer-example-ReusableMetadata-adapter-java)
+* [Lightstreamer - Stock-List Demo - Java Adapter](https://github.com/Lightstreamer/Lightstreamer-example-StockList-adapter-java)
 
 ## Lightstreamer Compatibility Notes
 
