@@ -94,7 +94,7 @@ Please refer to the *General Concepts* document (available under `DOCS-SDKs` in 
 
 If you want to install a version of the *Stock-List Demo* in your local Lightstreamer Server, follow these steps:
 
-* Download *Lightstreamer Server Version 6.0 or greater* (Lightstreamer Server comes with a free non-expiring demo license for 20 connected users) from [Lightstreamer Download page](http://www.lightstreamer.com/download.htm), and install it, as explained in the `GETTING_STARTED.TXT` file in the installation home directory.
+* Download *Lightstreamer Server Version 7.0 or greater* (Lightstreamer Server comes with a free non-expiring demo license for 20 connected users) from [Lightstreamer Download page](http://www.lightstreamer.com/download.htm), and install it, as explained in the `GETTING_STARTED.TXT` file in the installation home directory.
 * Make sure that Lightstreamer Server is not running.
 
 ### Installing the Adapter
@@ -115,9 +115,9 @@ The Mobile Push Notifications (MPN) module of Lightstreamer is not enabled by de
 The MPN module currently supports two MPN providers:
 
 * Apple's APNs for iOS
-* Google's GCM for Android
+* Google's FCM for Android
 
-Depending on the target operating system of your app, you may need to configure the `apns_notifier_conf.xml` file under `conf/mpn/apns`, `gcm_notifier_conf.xml` under `conf/mpn/gcm`, or both.
+Depending on the target operating system of your app, you may need to configure the `apple_notifier_conf.xml` file under `conf/mpn/apple`, `google_notifier_conf.xml` under `conf/mpn/google`, or both.
 
 #### Configuring the APNs Provider
 
@@ -129,7 +129,7 @@ For the APNs provider, you need the following material in order to configure it 
 
 All this may be obtained on the [Apple Developer Center](https://developer.apple.com/membercenter/index.action). Exporting the client certificate in p12 format may be done easily from the *Keychain Access* system app. This [guide](https://code.google.com/p/javapns/wiki/GetAPNSCertificate) describes the full procedure in details.
 
-Once you have the required material, add the following segment to the `apns_notifier_conf.xml` file:
+Once you have the required material, add the following segment to the `apple_notifier_conf.xml` file:
 
 ```xml
    <app id="your.app.id">
@@ -139,25 +139,26 @@ Once you have the required material, add the following segment to the `apns_noti
 
       <trigger_expressions>
          <accept>Double\.parseDouble\(\$\{[A-Za-z0-9_]+\}\) [&lt;&gt;] [+-]?(\d*\.)?\d+</accept>
+         <accept>Double\.parseDouble\(\$\[\d+\]\) [&lt;&gt;] [+-]?(\d*\.)?\d+</accept>
       </trigger_expressions>
    </app>
 ```
 
-Replace `your.app.id`, `your_client_certificate.p12` and `your certificate password` with the corresponding informations. The certificate file must be located in the same folder of `apns_notifier_conf.xml`, unless an absolute path is specified. The `<service_level>` tag must be set accordingly to your client certificate type: `development` (sandbox) or `production`. For more informations on the meaning of these tags please consult the `apns_notifier_conf.xml` itself or the *Mobile Push Notifications* section of the *General Concepts* document (available under `DOCS-SDKs` in your Lightstreamer Server installation).
+Replace `your.app.id`, `your_client_certificate.p12` and `your certificate password` with the corresponding informations. The certificate file must be located in the same folder of `apple_notifier_conf.xml`, unless an absolute path is specified. The `<service_level>` tag must be set accordingly to your client certificate type: `development` (sandbox) or `production`. For more informations on the meaning of these tags please consult the `apple_notifier_conf.xml` itself or the *Mobile Push Notifications* section of the *General Concepts* document (available under `DOCS-SDKs` in your Lightstreamer Server installation).
 
-#### Configuring the GCM Provider
+#### Configuring the FCM Provider
 
-For the GCM provider, you need the following material:
+For the FCM provider, you need the following material:
 
-* the *GCM sender ID* of your project;
+* the *FCM sender ID* of your project;
 * the *API key* of your project.
 
-All this may be both obtained from the [Google Developers Console](https://console.developers.google.com/project). Follow [this guide](http://developer.android.com/google/gcm/gs.html) for informations on how to configure your project appropriately to use GCM services.
+All this may be both obtained from the [Google Developers Console](https://console.developers.google.com/project). Follow [this guide](https://firebase.google.com/docs/cloud-messaging/server) for informations on how to configure your project appropriately to use FCM services.
 
-Once you have the required material, add the following segment to the `gcm_notifier_conf.xml` file:
+Once you have the required material, add the following segment to the `google_notifier_conf.xml` file:
 
 ```xml
-   <app packageName="com.lightstreamer.demo.android">
+   <app packageName="com.lightstreamer.demo.android.fcm">
       <service_level>production</service_level>
       <api_key>your-API-key</api_key>
 
@@ -167,7 +168,7 @@ Once you have the required material, add the following segment to the `gcm_notif
    </app>
 ```
 
-Replace `your-API-key` with the corresponding information. You will need the GMC sender ID later. For more informations on the meaning of these tags please consult the `gcm_notifier_conf.xml` itself or the *Mobile Push Notifications* section of the *General Concepts* document (available under `DOCS-SDKs` in your Lightstreamer Server installation).
+Replace `your-API-key` with the corresponding information. You will need the GMC sender ID later. For more informations on the meaning of these tags please consult the `google_notifier_conf.xml` itself or the *Mobile Push Notifications* section of the *General Concepts* document (available under `DOCS-SDKs` in your Lightstreamer Server installation).
 
 ### Configuring the MPN Database
 
@@ -178,17 +179,14 @@ If you don't have a working database instance, an HSQL test database may be inst
 * Download the latest stable release of HSQL from [hsqldb.org](http://hsqldb.org) and unzip it in a folder of your choice.
 * Copy the `hsqldb.jar` file from the `lib` folder of your HSQL installation to the `lib/mpn/hibernate` folder of your Lightstreamer Server installation.
 * Launch the HSQL instance by running the `runServer.sh` or `runServer.bat` script in the `bin` folder of your HSQL installation.
-* Open the `hibernate.cfg.xml` file.
-* Comment the section indicated by *Sample database connection settings for MySQL* and uncomment the section indicated by *Sample database connection settings for HSQL (not for production)*.
-* Comment the section indicated by *SQL dialect for MySQL* and uncomment the section indicated by *SQL dialect for HSQL*.
+* Open the `hibernate.cfg.xml` file and locate the pre-enabled section indicated by *Sample database connection settings for HSQL (not for production)*.
 * If your HSQL instance is running on a separate machine than the Lightstreamer Server, specify its IP address in place of `localhost` in the following property: `<property name="connection.url">jdbc:hsqldb:hsql://localhost</property>`.
 
 If you have a working database instance, follow these steps:
 
 * Copy the JDBC driver jar file (or files) to the `lib/mpn/hibernate` folder of your Lightstreamer Server installation.
 * Open the `hibernate.cfg.xml` file.
-* Specify the appropriate connection properties (samples are provided for MySQL, HSQL and Oracle), including the IP address.
-* Specify the appropriate SQL dialect (again, samples are provided for MySQL, HSQL and Oracle).
+* Specify the appropriate connection properties and SQL dialect (samples are provided for MySQL, HSQL and Oracle), including the IP address.
 
 A complete guide on configuring the Hibernate JDBC connection may be found [here](https://docs.jboss.org/hibernate/orm/4.2/manual/en-US/html/ch03.html#configuration-hibernatejdbc) (and [here](https://docs.jboss.org/hibernate/orm/4.2/manual/en-US/html/ch03.html#configuration-optional-dialects) is a list of available SQL dialects). Avoid introducing optional parameters, like those from tables 3.3 - 3.7, if they are not already present in the `hibernate.cfg.xml` file, as they may have not been tested and may lead to unexpected behavior. Do it only if you know what you are doing.
 
@@ -199,7 +197,7 @@ You may download the source code for the MPN Stock-List Demo iOS Client and MPN 
 * [Lightstreamer - MPN Stock-List Demo - iOS Client](https://github.com/Lightstreamer/Lightstreamer-example-MPNStockList-client-ios)
 * [Lightstreamer - MPN Stock-List Demo - Android Client](https://github.com/Lightstreamer/Lightstreamer-example-MPNStockList-client-android)
 
-Each project must be modified in order to work with your app ID and certificate (for APNs) or your sender ID (for GCM), and to point to your Lightstreamer Server.
+Each project must be modified in order to work with your app ID and certificate (for APNs) or your sender ID (for FCM), and to point to your Lightstreamer Server.
 
 For the iOS Client:
 
@@ -211,7 +209,7 @@ Also, remember to install an appropriate *provisioning profile* for the app, ena
 For the Android Client:
 
 * open the `res/values/strings.xml` file;
-* set the GCM sender ID in the  in the `sender_id` property;
+* set the FCM sender ID in the  in the `sender_id` property;
 * set the IP address of your Lightstreamer Server in the `host` property.
 
 Note that to receive push notifications you need a Google account configured on the system. In case the emulator is used a "Google APIs"
@@ -233,12 +231,12 @@ If everything is correct, you should receive the push notification within a few 
 To build your own version of `LS_StockListDemo_MetadataAdapter.jar`, instead of using the one provided in the `deploy.zip` file from the [Install](https://github.com/Lightstreamer/Lightstreamer-example-MPNStocklistMetadata-adapter-java#install) section above, follow these steps:
 
 * Download this project.
-* Get the `ls-adapter-interface.jar` file from the `/lib` folder of the [latest Lightstreamer distribution](http://www.lightstreamer.com/download), and copy it into the `lib` folder.
+* Get the `ls-adapter-interface.jar` file from the `/lib` folder of a [Lightstreamer distribution 7.0 or greater](http://www.lightstreamer.com/download), and copy it into the `lib` folder.
 * Get the `log4j-1.2.17.jar` file from [Apache log4j](https://logging.apache.org/log4j/1.2/) and copy it into the `lib` folder.
 * Create the jar `LS_StockListDemo_MetadataAdapter.jar` with commands like these:
 
 ```sh
- >javac -source 1.7 -target 1.7 -nowarn -g -classpath lib/log4j-1.2.17.jar;lib/ls-adapter-interface.jar -sourcepath src -d tmp_classes src/stocklist_demo/adapters/StockQuotesMetadataAdapter.java
+ >javac -source 1.8 -target 1.8 -nowarn -g -classpath lib/log4j-1.2.17.jar;lib/ls-adapter-interface.jar -sourcepath src -d tmp_classes src/stocklist_demo/adapters/StockQuotesMetadataAdapter.java
 
  >jar cvf LS_StockListDemo_MetadataAdapter.jar -C tmp_classes src
 ```
@@ -263,4 +261,4 @@ To build your own version of `LS_StockListDemo_MetadataAdapter.jar`, instead of 
 
 ## Lightstreamer Compatibility Notes
 
-- Compatible with Lightstreamer SDK for Java Adapters since 6.0.x
+- Compatible with Lightstreamer SDK for Java Adapters 6.0.x

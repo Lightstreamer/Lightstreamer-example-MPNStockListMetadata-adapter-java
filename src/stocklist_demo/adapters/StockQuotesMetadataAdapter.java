@@ -17,7 +17,6 @@
 package stocklist_demo.adapters;
 
 import java.io.File;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -33,8 +32,6 @@ import com.lightstreamer.interfaces.metadata.MpnPlatformType;
 import com.lightstreamer.interfaces.metadata.MpnSubscriptionInfo;
 import com.lightstreamer.interfaces.metadata.NotificationException;
 import com.lightstreamer.interfaces.metadata.TableInfo;
-import com.lightstreamer.interfaces.metadata.MpnSubscriptionInfo.MpnApnsSubscriptionInfo;
-import com.lightstreamer.interfaces.metadata.MpnSubscriptionInfo.MpnGcmSubscriptionInfo;
 
 public class StockQuotesMetadataAdapter extends LiteralBasedProvider {
 
@@ -68,6 +65,7 @@ public class StockQuotesMetadataAdapter extends LiteralBasedProvider {
 
     public StockQuotesMetadataAdapter() {}
     
+    @Override
     @SuppressWarnings("rawtypes") 
     public void init(Map params, File configDir)
             throws MetadataProviderException {
@@ -94,6 +92,7 @@ public class StockQuotesMetadataAdapter extends LiteralBasedProvider {
     /////////////////////////////////////////////////////////////////////////
     // Session management
 
+    @Override
     @SuppressWarnings({ "rawtypes", "unchecked" }) 
     public void notifyNewSession(String user, String session, Map clientContext)
         throws CreditsException, NotificationException {
@@ -112,6 +111,7 @@ public class StockQuotesMetadataAdapter extends LiteralBasedProvider {
         sessions.put(session, clientContext);
     }
 
+    @Override
     public void notifySessionClose(String session) throws NotificationException {
 
         // The session must exist to be closed
@@ -131,11 +131,13 @@ public class StockQuotesMetadataAdapter extends LiteralBasedProvider {
     /////////////////////////////////////////////////////////////////////////
     // Mobile push notifications management
     
-    public void notifyMpnDeviceAccess(String user, MpnDeviceInfo device)
+    @Override
+    public void notifyMpnDeviceAccess(String user, String sessionID, MpnDeviceInfo device)
             throws CreditsException, NotificationException {
         // Authorize all devices
     }
     
+    @Override
     @SuppressWarnings({ "unchecked", "rawtypes" }) 
     public void notifyMpnSubscriptionActivation(String user, String sessionID, TableInfo table, MpnSubscriptionInfo mpnSubscription)
             throws CreditsException, NotificationException {
@@ -168,85 +170,43 @@ public class StockQuotesMetadataAdapter extends LiteralBasedProvider {
         }
         
         // Check the platform type
-        if (mpnSubscription.getDevice().getType().getName().equals(MpnPlatformType.APNS.getName())) {
-            MpnApnsSubscriptionInfo apnsSubscription= (MpnApnsSubscriptionInfo) mpnSubscription;
+        if (mpnSubscription.getDevice().getType().getName().equals(MpnPlatformType.Apple.getName())) {
             
-            // Check the format, should be one of those supported by the iOS StockList Demo app
-            if (apnsSubscription.getFormat() == null) {
-                throw new CreditsException(-104, "Invalid format argument for push notifications");
-            }
-            
-            if ((!apnsSubscription.getFormat().equals("Stock ${stock_name} is now ${last_price}")) &&
-                (!apnsSubscription.getFormat().equals("Stock ${stock_name} rised above ${last_price}")) &&
-                (!apnsSubscription.getFormat().equals("Stock ${stock_name} dropped below ${last_price}"))) {
-                throw new CreditsException(-105, "Invalid format argument for push notifications");
-            }
-            
-            // Check the badge and sound format
-            if (!apnsSubscription.getBadge().equals("AUTO")) {
-                throw new CreditsException(-106, "Invalid badge argument for push notifications");
-            }
-            
-            if (!apnsSubscription.getSound().equals("Default")) {
-                throw new CreditsException(-107, "Invalid sound argument for push notifications");
-            }
+            // here, we can add APNS-related checks, by inspecting:
+            // mpnSubscription.getNotificationFormat()
             
             // Authorized, log it
             doLog(logger, sessionID, "Authorized APNS subscription with parameters:\n" + 
                     ((table.getId() != null) ? "\tgroup: " + table.getId() + "\n" : "") +
                     ((itemNames != null) && (itemNames.length > 0) ? "\titems: " + itemNames + "\n" : "") +
                     ((table.getSchema() != null) ? "\tschema: " + table.getSchema() + "\n" : "") +
-                    ((apnsSubscription.getTrigger() != null) ? "\ttrigger expression: " + apnsSubscription.getTrigger() + "\n" : "") +
-                    ((apnsSubscription.getSound() != null) ? "\tsound: " + apnsSubscription.getSound() + "\n" : "") +
-                    ((apnsSubscription.getBadge() != null) ? "\tbadge: " + apnsSubscription.getBadge() + "\n" : "") +
-                    ((apnsSubscription.getContentAvailable() != null) ? "\tcontent available: " + apnsSubscription.getContentAvailable() + "\n" : "") +
-                    ((apnsSubscription.getLocalizedActionKey() != null) ? "\tloc. action key: " + apnsSubscription.getLocalizedActionKey() + "\n" : "") +
-                    ((apnsSubscription.getCategory() != null) ? "\tcategory: " + apnsSubscription.getCategory() + "\n" : "") +
-                    ((apnsSubscription.getLaunchImage() != null) ? "\tlaunch image: " + apnsSubscription.getLaunchImage() + "\n" : "") +
-                    ((apnsSubscription.getFormat() != null) ? "\tformat: " + apnsSubscription.getFormat() + "\n" : "") +
-                    ((apnsSubscription.getLocalizedFormatKey() != null) ? "\tloc. format key: " + apnsSubscription.getLocalizedFormatKey() + "\n" : "") +
-                    ((apnsSubscription.getArguments() != null) && (apnsSubscription.getArguments().size() > 0) ? "\targuments: " + apnsSubscription.getArguments() + "\n" : "") +
-                    ((apnsSubscription.getCustomData() != null) && (apnsSubscription.getCustomData().size() > 0) ? "\tcustom data: " + apnsSubscription.getCustomData() + "\n" : ""));
+                    ((mpnSubscription.getTrigger() != null) ? "\ttrigger expression: " + mpnSubscription.getTrigger() + "\n" : "") +
+                    ((mpnSubscription.getNotificationFormat() != null) ? "\tformat: " + mpnSubscription.getNotificationFormat() + "\n" : ""));
+                    // here, we can add custom APNS log, by inspecting:
+                    // mpnSubscription.getNotificationFormat()
         
-        } else if (mpnSubscription.getDevice().getType().getName().equals(MpnPlatformType.GCM.getName())) {
-            MpnGcmSubscriptionInfo gcmSubscription= (MpnGcmSubscriptionInfo) mpnSubscription;
+        } else if (mpnSubscription.getDevice().getType().getName().equals(MpnPlatformType.Google.getName())) {
             
-            // Check the collapse key
-            if (!gcmSubscription.getCollapseKey().equals("Stock update")) {
-                throw new CreditsException(-105, "Invalid collapse key for push notifications");
-            }
-            
-            // Check the notification data, should be one of those supported by the Android StockList Demo app
-            Map data = gcmSubscription.getData();
-            for (Iterator<String> i = data.keySet().iterator(); i.hasNext();) {
-                String key = (String) i.next();
-                String val = (String) data.get(key);
-                if (!(key.equals("stock_name") && val.equals("${stock_name}")) &&
-                    !(key.equals("last_price") && val.equals("${last_price}")) &&
-                    !(key.equals("time") && val.equals("${time}")) && 
-                    !(key.equals("item") && val.matches("item\\d+"))) {
-                    
-                    throw new CreditsException(-105, "Invalid data argument for push notifications");
-                }
-            }
+            // here, we can add FCM-related checks, by inspecting:
+            // mpnSubscription.getNotificationFormat()
             
             // Authorized, log it
-            doLog(logger, sessionID, "Authorized GCM subscription with parameters:\n" + 
+            doLog(logger, sessionID, "Authorized FCM subscription with parameters:\n" + 
                     ((table.getId() != null) ? "\tgroup: " + table.getId() + "\n" : "") +
                     ((itemNames != null) && (itemNames.length > 0) ? "\titems: " + itemNames + "\n" : "") +
                     ((table.getSchema() != null) ? "\tschema: " + table.getSchema() + "\n" : "") +
-                    ((gcmSubscription.getTrigger() != null) ? "\ttrigger expression: " + gcmSubscription.getTrigger() + "\n" : "") +
-                    ((gcmSubscription.getCollapseKey() != null) ? "\tcollapse key: " + gcmSubscription.getCollapseKey() + "\n" : "") +
-                    ((gcmSubscription.getData() != null) && (gcmSubscription.getData().size() > 0) ? "\tdata: " + gcmSubscription.getData() + "\n" : "") +
-                    ((gcmSubscription.getDelayWhileIdle() != null) ? "\tdelay while idle: " + gcmSubscription.getDelayWhileIdle() + "\n" : "") +
-                    ((gcmSubscription.getTimeToLive() != null) ? "\ttime to live: " + gcmSubscription.getTimeToLive() + "\n" : ""));
+                    ((mpnSubscription.getTrigger() != null) ? "\ttrigger expression: " + mpnSubscription.getTrigger() + "\n" : "") +
+                    ((mpnSubscription.getNotificationFormat() != null) ? "\tformat: " + mpnSubscription.getNotificationFormat() + "\n" : ""));
+                    // here, we can add custom FCM log, by inspecting:
+                    // mpnSubscription.getNotificationFormat()
             
         } else {
             throw new CreditsException(-103, "Invalid platform argument for push notifications");
         }
     }
     
-    public void notifyMpnDeviceTokenChange(String user, MpnDeviceInfo device, String newDeviceToken)
+    @Override
+    public void notifyMpnDeviceTokenChange(String user, String sessionID, MpnDeviceInfo device, String newDeviceToken)
             throws CreditsException, NotificationException {
         // Authorize all token changes
     }
