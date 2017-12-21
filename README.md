@@ -262,3 +262,4 @@ To build your own version of `LS_StockListDemo_MetadataAdapter.jar`, instead of 
 ## Lightstreamer Compatibility Notes
 
 - Compatible with Lightstreamer SDK for Java Adapters Since 7.0
+- For an example compatible with Lightstreamer SDK for Java Adapters version 6.x, please refer to [this tag](https://github.com/Lightstreamer/Lightstreamer-example-MPNStockListMetadata-adapter-java/tree/for-server-6).
