@@ -94,12 +94,12 @@ Please refer to the *General Concepts* document (available under `DOCS-SDKs` in 
 
 If you want to install a version of the *Stock-List Demo* in your local Lightstreamer Server, follow these steps:
 
-* Download *Lightstreamer Server Version 6.0 or greater* (Lightstreamer Server comes with a free non-expiring demo license for 20 connected users) from [Lightstreamer Download page](http://www.lightstreamer.com/download.htm), and install it, as explained in the `GETTING_STARTED.TXT` file in the installation home directory.
+* Download *Lightstreamer Server Version 6.1* (Lightstreamer Server comes with a free non-expiring demo license for 20 connected users) from [Lightstreamer Download page](http://www.lightstreamer.com/download.htm), and install it, as explained in the `GETTING_STARTED.TXT` file in the installation home directory.
 * Make sure that Lightstreamer Server is not running.
 
 ### Installing the Adapter
 
-* Get the `deploy.zip` file of the [Metadata Adapter latest release](https://github.com/Lightstreamer/Lightstreamer-example-MPNStockListMetadata-adapter-java/releases), unzip it, and copy the `StockList` folder into the `adapters` folder of your Lightstreamer Server installation.
+* Get the `deploy.zip` file of the [Metadata Adapter latest release](https://github.com/Lightstreamer/Lightstreamer-example-MPNStockListMetadata-adapter-java/releases) available for Server 6, unzip it, and copy the `StockList` folder into the `adapters` folder of your Lightstreamer Server installation.
 * Get the `deploy.zip` file of the [Data Adapter latest release](https://github.com/Lightstreamer/Lightstreamer-example-StockList-adapter-java/releases), unzip it, and copy the content of `StockList/lib` folder into the `adapters/StockList/lib` folder of your Lightstreamer Server installation.
 
 ### Enabling the MPN Module
@@ -233,7 +233,7 @@ If everything is correct, you should receive the push notification within a few 
 To build your own version of `LS_StockListDemo_MetadataAdapter.jar`, instead of using the one provided in the `deploy.zip` file from the [Install](https://github.com/Lightstreamer/Lightstreamer-example-MPNStocklistMetadata-adapter-java#install) section above, follow these steps:
 
 * Download this project.
-* Get the `ls-adapter-interface.jar` file from the `/lib` folder of the [latest Lightstreamer distribution](http://www.lightstreamer.com/download), and copy it into the `lib` folder.
+* Get the `ls-adapter-interface.jar` file from the `/lib` folder of the [Lightstreamer 6.1 distribution](http://www.lightstreamer.com/download), and copy it into the `lib` folder.
 * Get the `log4j-1.2.17.jar` file from [Apache log4j](https://logging.apache.org/log4j/1.2/) and copy it into the `lib` folder.
 * Create the jar `LS_StockListDemo_MetadataAdapter.jar` with commands like these:
 
@@ -263,4 +263,4 @@ To build your own version of `LS_StockListDemo_MetadataAdapter.jar`, instead of 
 
 ## Lightstreamer Compatibility Notes
 
-- Compatible with Lightstreamer SDK for Java Adapters since 6.0.x
+- Compatible with Lightstreamer SDK for Java Adapters 6.0.x
