@@ -2,7 +2,7 @@
 
 <!-- START DESCRIPTION lightstreamer-example-mpnstocklistmetadata-adapter-java -->
 
-This project includes the resources needed to develop a Metadata Adapter for the [Lightstreamer - MPN Stock-List Demo - iOS Client](https://github.com/Lightstreamer/Lightstreamer-example-MPNStockList-client-ios#lightstreamer---mpn-stock-list-demo---ios-client) and the [Lightstreamer - MPN Stock-List Demo - Android Client](https://github.com/Lightstreamer/Lightstreamer-example-MPNStockList-client-android#lightstreamer---mpn-stock-list-demo---android-client) that is pluggable into Lightstreamer Server.<br>
+This project includes the resources needed to develop a Metadata Adapter for the [Lightstreamer - MPN Stock-List Demo - iOS Client](https://github.com/Lightstreamer/Lightstreamer-example-MPNStockList-client-ios/tree/for-client-1) and the [Lightstreamer - MPN Stock-List Demo - Android Client](https://github.com/Lightstreamer/Lightstreamer-example-MPNStockList-client-android/tree/for-client-1) that is pluggable into Lightstreamer Server.<br>
 The Stock-List demos simulate a market data feed and front-end for stock quotes. They show a list of stock symbols and updates prices and other fields displayed on the page in real-time. Both clients support Mobile Push Notifications (MPN).<br>
 
 ## Details
@@ -196,8 +196,8 @@ A complete guide on configuring the Hibernate JDBC connection may be found [here
 
 You may download the source code for the MPN Stock-List Demo iOS Client and MPN Stock-List Demo Android Client here:
 
-* [Lightstreamer - MPN Stock-List Demo - iOS Client](https://github.com/Lightstreamer/Lightstreamer-example-MPNStockList-client-ios)
-* [Lightstreamer - MPN Stock-List Demo - Android Client](https://github.com/Lightstreamer/Lightstreamer-example-MPNStockList-client-android)
+* [Lightstreamer - MPN Stock-List Demo - iOS Client](https://github.com/Lightstreamer/Lightstreamer-example-MPNStockList-client-ios/tree/for-client-1)
+* [Lightstreamer - MPN Stock-List Demo - Android Client](https://github.com/Lightstreamer/Lightstreamer-example-MPNStockList-client-android/tree/for-client-1)
 
 Each project must be modified in order to work with your app ID and certificate (for APNs) or your sender ID (for GCM), and to point to your Lightstreamer Server.
 
@@ -251,8 +251,8 @@ To build your own version of `LS_StockListDemo_MetadataAdapter.jar`, instead of 
 
 <!-- START RELATED_ENTRIES -->
 
-* [Lightstreamer - MPN Stock-List Demo - iOS Client](https://github.com/Lightstreamer/Lightstreamer-example-MPNStockList-client-ios)
-* [Lightstreamer - MPN Stock-List Demo - Android Client](https://github.com/Lightstreamer/Lightstreamer-example-MPNStockList-client-android)
+* [Lightstreamer - MPN Stock-List Demo - iOS Client](https://github.com/Lightstreamer/Lightstreamer-example-MPNStockList-client-ios/tree/for-client-1)
+* [Lightstreamer - MPN Stock-List Demo - Android Client](https://github.com/Lightstreamer/Lightstreamer-example-MPNStockList-client-android/tree/for-client-1)
 
 <!-- END RELATED_ENTRIES -->
 
