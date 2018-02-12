@@ -138,15 +138,14 @@ public class StockQuotesMetadataAdapter extends LiteralBasedProvider {
     }
     
     @Override
-    @SuppressWarnings({ "unchecked", "rawtypes" }) 
     public void notifyMpnSubscriptionActivation(String user, String sessionID, TableInfo table, MpnSubscriptionInfo mpnSubscription)
             throws CreditsException, NotificationException {
 
-        // We suppose someone may try to communite with the Server directly, through
-        // the text protocol, and force it to send unexpected or unwanted push notifications.
-        // He could try to change both the items and the format of legit push notifications,
-        // but could not change the app name, as it is checked by the Server during activation.
-        // Hence notifications may only be delivered to the legit app. He could not even change 
+        // We suppose someone may try to communicate with the Server directly, through
+        // the TLCP protocol, and force it to send unexpected or unwanted push notifications.
+        // They could try to change both the items and the format of legit push notifications,
+        // but could not change the app name, as it is checked by the Server during subscription.
+        // Hence notifications may only be delivered to the legit app. They could not even change 
         // the trigger expression, as it is filtered by the Server using the regular expression
         // list specified in configuration files.
         
@@ -164,15 +163,17 @@ public class StockQuotesMetadataAdapter extends LiteralBasedProvider {
         }
 
         for (String itemName : itemNames) {
-            if (!itemName.startsWith("item")) {
+            
+            // We accept item names for both stock list and chat demos
+            if ((!itemName.startsWith("item")) && (!itemName.equals("chat_room"))) {
                 throw new CreditsException(-102, "Invalid item argument for push notifications");
             }
         }
         
         // Check the platform type
         if (mpnSubscription.getDevice().getType().getName().equals(MpnPlatformType.Apple.getName())) {
-            
-            // here, we can add APNS-related checks, by inspecting:
+
+            // Here, we can add APNS-related checks, by inspecting the JSON string returned by:
             // mpnSubscription.getNotificationFormat()
             
             // Authorized, log it
@@ -182,12 +183,12 @@ public class StockQuotesMetadataAdapter extends LiteralBasedProvider {
                     ((table.getSchema() != null) ? "\tschema: " + table.getSchema() + "\n" : "") +
                     ((mpnSubscription.getTrigger() != null) ? "\ttrigger expression: " + mpnSubscription.getTrigger() + "\n" : "") +
                     ((mpnSubscription.getNotificationFormat() != null) ? "\tformat: " + mpnSubscription.getNotificationFormat() + "\n" : ""));
-                    // here, we can add custom APNS log, by inspecting:
+                    // Here, we can add custom APNS log, by inspecting the JSON string returned by:
                     // mpnSubscription.getNotificationFormat()
         
         } else if (mpnSubscription.getDevice().getType().getName().equals(MpnPlatformType.Google.getName())) {
-            
-            // here, we can add FCM-related checks, by inspecting:
+
+            // Here, we can add FCM-related checks, by inspecting the JSON string returned by:
             // mpnSubscription.getNotificationFormat()
             
             // Authorized, log it
@@ -197,7 +198,7 @@ public class StockQuotesMetadataAdapter extends LiteralBasedProvider {
                     ((table.getSchema() != null) ? "\tschema: " + table.getSchema() + "\n" : "") +
                     ((mpnSubscription.getTrigger() != null) ? "\ttrigger expression: " + mpnSubscription.getTrigger() + "\n" : "") +
                     ((mpnSubscription.getNotificationFormat() != null) ? "\tformat: " + mpnSubscription.getNotificationFormat() + "\n" : ""));
-                    // here, we can add custom FCM log, by inspecting:
+                    // Here, we can add custom FCM log, by inspecting the JSON string returned by:
                     // mpnSubscription.getNotificationFormat()
             
         } else {

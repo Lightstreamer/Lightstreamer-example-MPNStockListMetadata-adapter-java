@@ -85,7 +85,7 @@ The `adapters.xml` file for the Stock-List Demo, should look like:
 </adapters_conf>
 ```
 
-<i>NOTE: not all configuration options of an Adapter Set are exposed by the file suggested above. 
+<i>NOTE: not all configuration options of an Adapter Set are exposed by the file suggested above.
 You can easily expand your configurations using the generic template, `DOCS-SDKs/sdk_adapter_java_inprocess/doc/adapter_conf_template/adapters.xml`, as a reference.</i><br>
 <br>
 Please refer to the *General Concepts* document (available under `DOCS-SDKs` in your Lightstreamer Server installation) for more details about Lightstreamer Adapters.<br>
@@ -188,7 +188,7 @@ If you have a working database instance, follow these steps:
 * Open the `hibernate.cfg.xml` file.
 * Specify the appropriate connection properties and SQL dialect (samples are provided for MySQL, HSQL and Oracle), including the IP address.
 
-A complete guide on configuring the Hibernate JDBC connection may be found [here](https://docs.jboss.org/hibernate/orm/4.2/manual/en-US/html/ch03.html#configuration-hibernatejdbc) (and [here](https://docs.jboss.org/hibernate/orm/4.2/manual/en-US/html/ch03.html#configuration-optional-dialects) is a list of available SQL dialects). Avoid introducing optional parameters, like those from tables 3.3 - 3.7, if they are not already present in the `hibernate.cfg.xml` file, as they may have not been tested and may lead to unexpected behavior. Do it only if you know what you are doing.
+A complete guide on configuring the Hibernate JDBC connection may be found [here](https://docs.jboss.org/hibernate/orm/5.0/manual/en-US/html/ch03.html#configuration-hibernatejdbc) (and [here](https://docs.jboss.org/hibernate/orm/5.0/manual/en-US/html/ch03.html#configuration-optional-dialects) is a list of available SQL dialects). Avoid introducing optional parameters, like those from tables 3.3 - 3.7, if they are not already present in the `hibernate.cfg.xml` file, as they may have not been tested and may lead to unexpected behavior. Do it only if you know what you are doing.
 
 ### Compiling and Building the Clients
 
