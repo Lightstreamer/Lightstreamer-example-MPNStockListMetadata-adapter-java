@@ -163,9 +163,7 @@ public class StockQuotesMetadataAdapter extends LiteralBasedProvider {
         }
 
         for (String itemName : itemNames) {
-            
-            // We accept item names for both stock list and chat demos
-            if ((!itemName.startsWith("item")) && (!itemName.equals("chat_room"))) {
+            if (!itemName.startsWith("item")) {
                 throw new CreditsException(-102, "Invalid item argument for push notifications");
             }
         }
