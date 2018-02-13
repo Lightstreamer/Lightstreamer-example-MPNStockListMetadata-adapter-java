@@ -48,7 +48,7 @@ The `adapters.xml` file for the Stock-List Demo, should look like:
     <metadata_provider>
 
         <!-- Mandatory. Java class name of the adapter. -->
-        <adapter_class>stocklist_demo.adapters.metadata.StockQuotesMetadataAdapter</adapter_class>
+        <adapter_class>stocklist_demo.adapters.metadata.MPNStockQuotesMetadataAdapter</adapter_class>
 
         <!-- Optional.
              See LiteralBasedProvider javadoc. -->
@@ -66,7 +66,7 @@ The `adapters.xml` file for the Stock-List Demo, should look like:
         <param name="item_family_1">item.*</param>
         <param name="modes_for_item_family_1">MERGE</param>
 
-        <!-- Optional for StockQuotesMetadataAdapter.
+        <!-- Optional for MPNStockQuotesMetadataAdapter.
              Configuration file for the Adapter's own logging.
              Logging is managed through log4j. -->
         <param name="log_config">adapters_log_conf.xml</param>
@@ -228,20 +228,20 @@ If everything is correct, you should receive the push notification within a few 
 
 ## Build
 
-To build your own version of `LS_StockListDemo_MetadataAdapter.jar`, instead of using the one provided in the `deploy.zip` file from the [Install](https://github.com/Lightstreamer/Lightstreamer-example-MPNStocklistMetadata-adapter-java#install) section above, follow these steps:
+To build your own version of `LS_MPN_StockListDemo_MetadataAdapter.jar`, instead of using the one provided in the `deploy.zip` file from the [Install](https://github.com/Lightstreamer/Lightstreamer-example-MPNStocklistMetadata-adapter-java#install) section above, follow these steps:
 
 * Download this project.
 * Get the `ls-adapter-interface.jar` file from the `/lib` folder of a [Lightstreamer distribution 7.0 or greater](http://www.lightstreamer.com/download), and copy it into the `lib` folder.
 * Get the `log4j-1.2.17.jar` file from [Apache log4j](https://logging.apache.org/log4j/1.2/) and copy it into the `lib` folder.
-* Create the jar `LS_StockListDemo_MetadataAdapter.jar` with commands like these:
+* Create the jar `LS_MPN_StockListDemo_MetadataAdapter.jar` with commands like these:
 
 ```sh
- >javac -source 1.8 -target 1.8 -nowarn -g -classpath lib/log4j-1.2.17.jar;lib/ls-adapter-interface.jar -sourcepath src -d tmp_classes src/stocklist_demo/adapters/StockQuotesMetadataAdapter.java
+ >javac -source 1.8 -target 1.8 -nowarn -g -classpath lib/log4j-1.2.17.jar;lib/ls-adapter-interface.jar -sourcepath src -d tmp_classes src/stocklist_demo/adapters/MPNStockQuotesMetadataAdapter.java
 
- >jar cvf LS_StockListDemo_MetadataAdapter.jar -C tmp_classes src
+ >jar cvf LS_MPN_StockListDemo_MetadataAdapter.jar -C tmp_classes src
 ```
 
-* Copy the just compiled `LS_StockListDemo_MetadataAdapter.jar` in the `adapters/Stocklist/lib` folder of your Lightstreamer Server installation.
+* Copy the just compiled `LS_MPN_StockListDemo_MetadataAdapter.jar` in the `adapters/Stocklist/lib` folder of your Lightstreamer Server installation.
 
 ## See Also
 

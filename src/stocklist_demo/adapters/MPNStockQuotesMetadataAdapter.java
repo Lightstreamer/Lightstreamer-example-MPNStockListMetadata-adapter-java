@@ -33,7 +33,7 @@ import com.lightstreamer.interfaces.metadata.MpnSubscriptionInfo;
 import com.lightstreamer.interfaces.metadata.NotificationException;
 import com.lightstreamer.interfaces.metadata.TableInfo;
 
-public class StockQuotesMetadataAdapter extends LiteralBasedProvider {
+public class MPNStockQuotesMetadataAdapter extends LiteralBasedProvider {
 
     /**
      * Keeps the client context informations supplied by Lightstreamer
@@ -63,7 +63,7 @@ public class StockQuotesMetadataAdapter extends LiteralBasedProvider {
     /////////////////////////////////////////////////////////////////////////
     // Initialization
 
-    public StockQuotesMetadataAdapter() {}
+    public MPNStockQuotesMetadataAdapter() {}
     
     @Override
     @SuppressWarnings("rawtypes") 
