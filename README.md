@@ -179,7 +179,7 @@ If you don't have a working database instance, an HSQL test database may be inst
 * Download the latest stable release of HSQL from [hsqldb.org](http://hsqldb.org) and unzip it in a folder of your choice.
 * Copy the `hsqldb.jar` file from the `lib` folder of your HSQL installation to the `lib/mpn/hibernate` folder of your Lightstreamer Server installation.
 * Launch the HSQL instance by running the `runServer.sh` or `runServer.bat` script in the `bin` folder of your HSQL installation.
-* Open the `hibernate.cfg.xml` file and locate the pre-enabled section indicated by *Sample database connection settings for HSQL (not for production)*.
+* Open the `hibernate.cfg.xml` file and locate the pre-enabled section indicated by *Sample database connection settings for HSQL*.
 * If your HSQL instance is running on a separate machine than the Lightstreamer Server, specify its IP address in place of `localhost` in the following property: `<property name="connection.url">jdbc:hsqldb:hsql://localhost</property>`.
 
 If you have a working database instance, follow these steps:
