@@ -2,8 +2,8 @@
 
 <!-- START DESCRIPTION lightstreamer-example-mpnstocklistmetadata-adapter-java -->
 
-This project includes the resources needed to develop a Metadata Adapter for the [Lightstreamer - MPN Stock-List Demo - iOS Client](https://github.com/Lightstreamer/Lightstreamer-example-MPNStockList-client-ios#lightstreamer---mpn-stock-list-demo---ios-client) and the [Lightstreamer - MPN Stock-List Demo - Android Client](https://github.com/Lightstreamer/Lightstreamer-example-MPNStockList-client-android#lightstreamer---mpn-stock-list-demo---android-client) that is pluggable into Lightstreamer Server.<br>
-The Stock-List demos simulate a market data feed and front-end for stock quotes. They show a list of stock symbols and updates prices and other fields displayed on the page in real-time. Both clients support Mobile Push Notifications (MPN).<br>
+This project includes the resources needed to develop a Metadata Adapter for the [Lightstreamer - MPN Stock-List Demo - iOS Client](https://github.com/Lightstreamer/Lightstreamer-example-MPNStockList-client-ios), the [Lightstreamer - MPN Stock-List Demo - Android Client](https://github.com/Lightstreamer/Lightstreamer-example-MPNStockList-client-android), and the [Lightstreamer - MPN Stock-List Demo - HTML Client](https://github.com/Lightstreamer/Lightstreamer-example-MPNStockList-client-javascript) that is pluggable into Lightstreamer Server.<br>
+The Stock-List demos simulate a market data feed and front-end for stock quotes. They show a list of stock symbols and update prices and other fields displayed on the page in real-time. All clients support Mobile Push Notifications (MPN). The HTML Client in particular supports Web Push Notifications.<br>
 
 ## Details
 
@@ -92,9 +92,9 @@ Please refer to the *General Concepts* document (available under `DOCS-SDKs` in 
 
 ## Install
 
-If you want to install a version of the *Stock-List Demo* in your local Lightstreamer Server, follow these steps:
+If you want to install a version of the *MPN Stock-List Demo* in your local Lightstreamer Server, follow these steps:
 
-* Download *Lightstreamer Server Version 7.0 or greater* (Lightstreamer Server comes with a free non-expiring demo license for 20 connected users) from [Lightstreamer Download page](http://www.lightstreamer.com/download.htm), and install it, as explained in the `GETTING_STARTED.TXT` file in the installation home directory.
+* Download *Lightstreamer Server Version 7.1 or greater* (Lightstreamer Server comes with a free non-expiring demo license for 20 connected users) from [Lightstreamer Download page](http://www.lightstreamer.com/download.htm), and install it, as explained in the `GETTING_STARTED.TXT` file in the installation home directory.
 * Make sure that Lightstreamer Server is not running.
 
 ### Installing the Adapter
@@ -114,8 +114,8 @@ The Mobile Push Notifications (MPN) module of Lightstreamer is not enabled by de
 
 The MPN module currently supports two MPN providers:
 
-* Apple's APNs for iOS
-* Google's FCM for Android
+* Apple&trade;  APNs for iOS, macOS, tvOS, watchOS and Safari
+* Google&trade; FCM for Android, Chrome and Firefox
 
 Depending on the target operating system of your app, you may need to configure the `apple_notifier_conf.xml` file under `conf/mpn/apple`, `google_notifier_conf.xml` under `conf/mpn/google`, or both.
 
@@ -129,13 +129,23 @@ For the APNs provider, you need the following material in order to configure it 
 
 All this may be obtained on the [Apple Developer Center](https://developer.apple.com/membercenter/index.action). Exporting the client certificate in p12 format may be done easily from the *Keychain Access* system app. This [guide](https://code.google.com/p/javapns/wiki/GetAPNSCertificate) describes the full procedure in details.
 
+If you are configuring the server also for the MPN Stock-List Demo HTML Client, which makes use of web push notifications, you also need the following:
+
+* a *website push ID* in place of the *app ID*;
+* a *push package zip file*.
+
+Detailed instructions on how to prepare a push package zip file can be found in the *General Concepts* document (available under `DOCS-SDKs` in your Lightstreamer Server installation).
+
 Once you have the required material, add the following segment to the `apple_notifier_conf.xml` file:
 
 ```xml
-   <app id="your.app.id">
+   <app id="your.app.id.or.website.push.id">
       <service_level>development</service_level>
       <keystore_file>your_client_certificate.p12</keystore_file>
       <keystore_password>your certificate password</keystore_password>
+      
+      <!-- Only for the HTML Client -->
+      <push_package_file>your_push_package.zip</push_package_file> 
 
       <trigger_expressions>
          <accept>Double\.parseDouble\(\$\{[A-Za-z0-9_]+\}\) [&lt;&gt;] [+-]?(\d*\.)?\d+</accept>
@@ -144,31 +154,37 @@ Once you have the required material, add the following segment to the `apple_not
    </app>
 ```
 
-Replace `your.app.id`, `your_client_certificate.p12` and `your certificate password` with the corresponding informations. The certificate file must be located in the same folder of `apple_notifier_conf.xml`, unless an absolute path is specified. The `<service_level>` tag must be set accordingly to your client certificate type: `development` (sandbox) or `production`. For more informations on the meaning of these tags please consult the `apple_notifier_conf.xml` itself or the *Mobile Push Notifications* section of the *General Concepts* document (available under `DOCS-SDKs` in your Lightstreamer Server installation).
+Replace `your.app.id.or.website.push.id`, `your_client_certificate.p12`, `your certificate password` and `your_push_package.zip` with the corresponding informations. The certificate and the push package files must be located in the same folder of `apple_notifier_conf.xml`, unless an absolute path is specified. The `<service_level>` tag must be set accordingly to your client certificate type: `development` (sandbox) or `production` (note that certificates for web push notifications can be only of `production` type).
+
+For more informations on the meaning of these tags please consult the `apple_notifier_conf.xml` itself or the *Mobile Push Notifications* section of the *General Concepts* document (available under `DOCS-SDKs` in your Lightstreamer Server installation).
 
 #### Configuring the FCM Provider
 
 For the FCM provider, you need the following material:
 
-* the *FCM sender ID* of your project;
-* the *API key* of your project.
+* the *package name* of your project;
+* the *service JSON descriptor* of your project.
 
-All this may be both obtained from the [Google Developers Console](https://console.developers.google.com/project). Follow [this guide](https://firebase.google.com/docs/cloud-messaging/server) for informations on how to configure your project appropriately to use FCM services.
+The *package name* is typically chosen by you when developing your project. For our MPN Stock-List Demo Android Client and HTML Client it is `com.lightstreamer.demo.android.fcm`.
+
+The *service JSON descriptor* can obtained from the [Google Cloud Platform console](https://console.cloud.google.com/). Detailed instructions on how to obtain the descriptor can be found in the *General Concepts* document (available under `DOCS-SDKs` in your Lightstreamer Server installation).
 
 Once you have the required material, add the following segment to the `google_notifier_conf.xml` file:
 
 ```xml
-   <app packageName="com.lightstreamer.demo.android.fcm">
+   <app packageName="your.package.name">
       <service_level>production</service_level>
-      <api_key>your-API-key</api_key>
+      <service_json_file>your_service_descriptor.json</service_json_file>
 
       <trigger_expressions>
-         <accept>Double\.parseDouble\(\$\[\d\]+\)[&lt;&gt;]=[+-]?(\d*\.)?\d+</accept>
+         <accept>Double\.parseDouble\(\$\[\d+\]\)\s?[&lt;&gt;]\s?=?[+-]?(\d*\.)?\d+</accept>
       </trigger_expressions>
    </app>
 ```
 
-Replace `your-API-key` with the corresponding information. You will need the GMC sender ID later. For more informations on the meaning of these tags please consult the `google_notifier_conf.xml` itself or the *Mobile Push Notifications* section of the *General Concepts* document (available under `DOCS-SDKs` in your Lightstreamer Server installation).
+Replace `your.package.name` and `your_service_descriptor.json` with the corresponding information. The service JSON files must be located in the same folder of `google_notifier_conf.xml`, unless an absolute path is specified.
+
+For more informations on the meaning of these tags please consult the `google_notifier_conf.xml` itself or the *Mobile Push Notifications* section of the *General Concepts* document (available under `DOCS-SDKs` in your Lightstreamer Server installation).
 
 ### Configuring the MPN Database
 
@@ -192,35 +208,62 @@ A complete guide on configuring the Hibernate JDBC connection may be found [here
 
 ### Compiling and Building the Clients
 
-You may download the source code for the MPN Stock-List Demo iOS Client and MPN Stock-List Demo Android Client here:
+You may download the source code for the MPN Stock-List Demo iOS Client, Android Client and HTML Client here:
 
 * [Lightstreamer - MPN Stock-List Demo - iOS Client](https://github.com/Lightstreamer/Lightstreamer-example-MPNStockList-client-ios)
 * [Lightstreamer - MPN Stock-List Demo - Android Client](https://github.com/Lightstreamer/Lightstreamer-example-MPNStockList-client-android)
+* [Lightstreamer - MPN Stock-List Demo - HTML Client](https://github.com/Lightstreamer/Lightstreamer-example-MPNStockList-client-javascript)
 
-Each project must be modified in order to work with your app ID and certificate (for APNs) or your sender ID (for FCM), and to point to your Lightstreamer Server.
+Each project must be modified in order to work with your configuration and to point to your Lightstreamer Server.
 
-For the iOS Client:
+#### The iOS Client
 
-* your app ID must be set as the *Bundle Identifier* of the project (in Xcode, it may be found in the General tab of the project);
+* Your app ID must be set as the *Bundle Identifier* of the project (in Xcode, it may be found in the General tab of the project);
 * the IP address of your Lightstreamer Server must be set in the `PUSH_SERVER_URL` constant in the `Shared/Constants.h` file.
 
 Also, remember to install an appropriate *provisioning profile* for the app, enabled for push notifications, before building or running the code.
 
-For the Android Client:
+#### The Android Client
 
-* open the `res/values/strings.xml` file;
-* set the FCM sender ID in the  in the `sender_id` property;
+* Open the `res/values/strings.xml` file;
 * set the IP address of your Lightstreamer Server in the `host` property.
 
-Note that to receive push notifications you need a Google account configured on the system. In case the emulator is used a "Google APIs"
-OS image has to be used.
+Note that to receive push notifications you need a Google account configured on the system. In case the emulator is used, a "Google APIs" OS image is needed.
+
+#### The HTML Client
+
+The MPN Stock-List Demo HTML Client is a push notifications-enabled web app compatible with two very different platforms (Safari and Firebase), and as such the parameters needed to fully configure it are numerous. Moreover, the JavaScript files that it is composed of not always can share information.
+
+With this premise, follow these steps:
+
+* open the `js/const.js` file of the specific demo you are configuring (basic or standard);
+  * for the *Apple (Safari)* web push configuration:
+      * set the `APPLE_WEBSITE_URL`, `APPLE_WEB_SERVICE_URL` values to the IP address of your Lightstreamer Server (leave the path intanct in the `APPLE_WEB_SERVICE_URL`);
+      * set the `APPLE_WEBSITE_PUSH_ID` to your website push ID;
+  * for the *Firebase (Chrome/Firefox)* web push configuration:
+      * set the `GOOGLE_API_KEY`, `GOOGLE_PROJECT_ID`, `GOOGLE_APP_ID`, `GOOGLE_SENDER_ID` and `GOOGLE_VAPID_KEY` according to your project;
+* open the `firebase-messaging-sw.js` file;
+  * set the `SENDER_ID` value according to your project;
+  * set the `PAGE_URL` value to the URL of your demo installation (a click on a web push notification will open this URL);
+* open the `js/lsClient.js` file of the specific demo you are configuring (basic or standard);
+  * search this line and set the IP address of your Lightstreamer Server:
+      * `var lsClient= new LightstreamerClient(protocolToUse+"//localhost:"+portToUse,"DEMO");`
+* get the `lightstreamer.js` file from [npm](https://www.npmjs.com/package/lightstreamer-client-web) or [unpkg](https://unpkg.com/lightstreamer-client-web/lightstreamer.js) and put it in the `src/[demo_name]/js` folder of the demo (if that is the case, please create it);
+* get the `require.js` file form [requirejs.org](http://requirejs.org/docs/download.html) and put it in the `src/[demo_name]/js` folder of the demo.
+
+You can deploy these demos to use the Lightstreamer server as web server or in any external web server you are running. If you choose the former case, please create the folders `<LS_HOME>/pages/[demo_name]` then copy here the contents of the `src` and `src/[demo_name]` folders of this project.
+
+For further information on how to configure your web app for web push notifications, see the *General Concepts* document (available under `DOCS-SDKs` in your Lightstreamer Server installation) and the original guides by Apple and Google:
+
+* Apple (Safari): [Configuring Safari Push Notifications](https://developer.apple.com/library/archive/documentation/NetworkingInternet/Conceptual/NotificationProgrammingGuideForWebsites/PushNotifications/PushNotifications.html#//apple_ref/doc/uid/TP40013225-CH3-SW1)
+* Google FCM (Chrome/Firefox): [Set up a JavaScript Firebase Cloud Messaging client app](https://firebase.google.com/docs/cloud-messaging/js/client)
 
 ### Finishing Installation
 
 Done all this, the installation is finished and ready to be tested:
 
 * Launch the Lightstreamer Server.
-* Launch the iOS Client or the Android Client on your device or emulator (remember the iOS Simulator does not support push notifications).
+* Launch the iOS Client, the Android Client or the HTML Client on your device, emulator or browser (remember that the iOS Simulator does not support push notifications).
 * Wait for the connection to be established (the real-time stock-list data will start to blink).
 * Set up a push notification with the UI provided.
 
@@ -251,6 +294,7 @@ To build your own version of `LS_MPN_StockListDemo_MetadataAdapter.jar`, instead
 
 * [Lightstreamer - MPN Stock-List Demo - iOS Client](https://github.com/Lightstreamer/Lightstreamer-example-MPNStockList-client-ios)
 * [Lightstreamer - MPN Stock-List Demo - Android Client](https://github.com/Lightstreamer/Lightstreamer-example-MPNStockList-client-android)
+* [Lightstreamer - MPN Stock-List Demo - HTML Client](https://github.com/Lightstreamer/Lightstreamer-example-MPNStockList-client-javascript)
 
 <!-- END RELATED_ENTRIES -->
 
@@ -262,4 +306,6 @@ To build your own version of `LS_MPN_StockListDemo_MetadataAdapter.jar`, instead
 ## Lightstreamer Compatibility Notes
 
 - Compatible with Lightstreamer SDK for Java Adapters Since 7.0
+- Configuration instructions compatible with Lightstreamer Server since version 7.1
+- For an example compatible with Lightstreamer Server version 7.0.x, please refer to [this tag](https://github.com/Lightstreamer/Lightstreamer-example-MPNStockListMetadata-adapter-java/tree/for-server-7.0).
 - For an example compatible with Lightstreamer SDK for Java Adapters version 6.x, please refer to [this tag](https://github.com/Lightstreamer/Lightstreamer-example-MPNStockListMetadata-adapter-java/tree/for-server-6).
