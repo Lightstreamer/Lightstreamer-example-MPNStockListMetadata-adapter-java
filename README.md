@@ -154,9 +154,9 @@ Once you have the required material, add the following segment to the `apple_not
    </app>
 ```
 
-Replace `your.app.id.or.website.push.id`, `your_client_certificate.p12`, `your certificate password` and `your_push_package.zip` with the corresponding informations. The certificate and the push package files must be located in the same folder of `apple_notifier_conf.xml`, unless an absolute path is specified. The `<service_level>` tag must be set accordingly to your client certificate type: `development` (sandbox) or `production` (note that certificates for web push notifications can be only of `production` type).
+Replace `your.app.id.or.website.push.id`, `your_client_certificate.p12`, `your certificate password` and `your_push_package.zip` with the corresponding information. The certificate and the push package files must be located in the same folder of `apple_notifier_conf.xml`, unless an absolute path is specified. The `<service_level>` tag must be set accordingly to your client certificate type: `development` (sandbox) or `production` (note that certificates for web push notifications can be only of `production` type).
 
-For more informations on the meaning of these tags please consult the `apple_notifier_conf.xml` itself or the *Mobile Push Notifications* section of the *General Concepts* document (available under `DOCS-SDKs` in your Lightstreamer Server installation).
+For more information on the meaning of these tags please consult the `apple_notifier_conf.xml` itself or the *Mobile Push Notifications* section of the *General Concepts* document (available under `DOCS-SDKs` in your Lightstreamer Server installation).
 
 #### Configuring the FCM Provider
 
@@ -184,7 +184,7 @@ Once you have the required material, add the following segment to the `google_no
 
 Replace `your.package.name` and `your_service_descriptor.json` with the corresponding information. The service JSON files must be located in the same folder of `google_notifier_conf.xml`, unless an absolute path is specified.
 
-For more informations on the meaning of these tags please consult the `google_notifier_conf.xml` itself or the *Mobile Push Notifications* section of the *General Concepts* document (available under `DOCS-SDKs` in your Lightstreamer Server installation).
+For more information on the meaning of these tags please consult the `google_notifier_conf.xml` itself or the *Mobile Push Notifications* section of the *General Concepts* document (available under `DOCS-SDKs` in your Lightstreamer Server installation).
 
 ### Configuring the MPN Database
 
