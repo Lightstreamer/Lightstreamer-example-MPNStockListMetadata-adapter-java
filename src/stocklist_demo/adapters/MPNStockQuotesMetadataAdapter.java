@@ -36,7 +36,7 @@ import com.lightstreamer.interfaces.metadata.TableInfo;
 public class MPNStockQuotesMetadataAdapter extends LiteralBasedProvider {
 
     /**
-     * Keeps the client context informations supplied by Lightstreamer
+     * Keeps the client context information supplied by Lightstreamer
      * on the new session notifications.
      * Session information is used when logging MPN subscription activations.
      */
@@ -117,7 +117,7 @@ public class MPNStockQuotesMetadataAdapter extends LiteralBasedProvider {
         // The session must exist to be closed
         assert(sessions.containsKey(session));
 
-        // We have to remove session informations from the session HashMap
+        // We have to remove session information from the session HashMap
         // and from the pairs "Set"
         Map<String,String> sessionInfo = sessions.get(session);
         String ua = sessionInfo.get("USER_AGENT");
