@@ -81,7 +81,7 @@ The `adapters.xml` file for the Stock-List Demo, should look like:
 <i>NOTE: not all configuration options of an Adapter Set are exposed by the file suggested above.
 You can easily expand your configurations using the generic template, see the [Java In-Process Adapter Interface Project](https://github.com/Lightstreamer/Lightstreamer-lib-adapter-java-inprocess#configuration) for details.</i><br>
 <br>
-Please refer to the *General Concepts* document (available under `DOCS-SDKs` in your Lightstreamer Server installation) for more details about Lightstreamer Adapters.<br>
+Please refer to the [*General Concepts* document](https://lightstreamer.com/docs/ls-server/latest/General%20Concepts.pdf) for more details about Lightstreamer Adapters.<br>
 
 ## Install
 
@@ -127,7 +127,7 @@ If you are configuring the server also for the MPN Stock-List Demo HTML Client, 
 * a *website push ID* in place of the *app ID*;
 * a *push package zip file*.
 
-Detailed instructions on how to prepare a push package zip file can be found in the *General Concepts* document (available under `DOCS-SDKs` in your Lightstreamer Server installation).
+Detailed instructions on how to prepare a push package zip file can be found in the [*General Concepts* document](https://lightstreamer.com/docs/ls-server/latest/General%20Concepts.pdf).
 
 Once you have the required material, add the following segment to the `apple_notifier_conf.xml` file:
 
@@ -149,7 +149,7 @@ Once you have the required material, add the following segment to the `apple_not
 
 Replace `your.app.id.or.website.push.id`, `your_client_certificate.p12`, `your certificate password` and `your_push_package.zip` with the corresponding information. The certificate and the push package files must be located in the same folder of `apple_notifier_conf.xml`, unless an absolute path is specified. The `<service_level>` tag must be set accordingly to your client certificate type: `development` (sandbox) or `production` (note that certificates for web push notifications can be only of `production` type).
 
-For more information on the meaning of these tags please consult the `apple_notifier_conf.xml` itself or the *Mobile Push Notifications* section of the *General Concepts* document (available under `DOCS-SDKs` in your Lightstreamer Server installation).
+For more information on the meaning of these tags please consult the `apple_notifier_conf.xml` itself or the *Mobile Push Notifications* section of the [*General Concepts* document](https://lightstreamer.com/docs/ls-server/latest/General%20Concepts.pdf).
 
 #### Configuring the FCM Provider
 
@@ -160,7 +160,7 @@ For the FCM provider, you need the following material:
 
 The *package name* is typically chosen by you when developing your project. For our MPN Stock-List Demo Android Client and HTML Client it is `com.lightstreamer.demo.android.fcm`.
 
-The *service JSON descriptor* can obtained from the [Google Cloud Platform console](https://console.cloud.google.com/). Detailed instructions on how to obtain the descriptor can be found in the *General Concepts* document (available under `DOCS-SDKs` in your Lightstreamer Server installation).
+The *service JSON descriptor* can obtained from the [Google Cloud Platform console](https://console.cloud.google.com/). Detailed instructions on how to obtain the descriptor can be found in the [*General Concepts* document](https://lightstreamer.com/docs/ls-server/latest/General%20Concepts.pdf).
 
 Once you have the required material, add the following segment to the `google_notifier_conf.xml` file:
 
@@ -177,7 +177,7 @@ Once you have the required material, add the following segment to the `google_no
 
 Replace `your.package.name` and `your_service_descriptor.json` with the corresponding information. The service JSON files must be located in the same folder of `google_notifier_conf.xml`, unless an absolute path is specified.
 
-For more information on the meaning of these tags please consult the `google_notifier_conf.xml` itself or the *Mobile Push Notifications* section of the *General Concepts* document (available under `DOCS-SDKs` in your Lightstreamer Server installation).
+For more information on the meaning of these tags please consult the `google_notifier_conf.xml` itself or the *Mobile Push Notifications* section of the [*General Concepts* document](https://lightstreamer.com/docs/ls-server/latest/General%20Concepts.pdf).
 
 ### Configuring the MPN Database
 
@@ -246,7 +246,7 @@ With this premise, follow these steps:
 
 You can deploy these demos to use the Lightstreamer server as web server or in any external web server you are running. If you choose the former case, please create the folders `<LS_HOME>/pages/[demo_name]` then copy here the contents of the `src` and `src/[demo_name]` folders of this project.
 
-For further information on how to configure your web app for web push notifications, see the *General Concepts* document (available under `DOCS-SDKs` in your Lightstreamer Server installation) and the original guides by Apple and Google:
+For further information on how to configure your web app for web push notifications, see the [*General Concepts* document](https://lightstreamer.com/docs/ls-server/latest/General%20Concepts.pdf) and the original guides by Apple and Google:
 
 * Apple (Safari): [Configuring Safari Push Notifications](https://developer.apple.com/library/archive/documentation/NetworkingInternet/Conceptual/NotificationProgrammingGuideForWebsites/PushNotifications/PushNotifications.html#//apple_ref/doc/uid/TP40013225-CH3-SW1)
 * Google FCM (Chrome/Firefox): [Set up a JavaScript Firebase Cloud Messaging client app](https://firebase.google.com/docs/cloud-messaging/js/client)
