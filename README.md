@@ -259,7 +259,7 @@ If everything is correct, you should receive the push notification within a few 
 ## Build
 
 
-To build your own version of `example-MPNStockList-adapter-java-0.0.1-SNAPSHOT.jar` instead of using the one provided in the `deploy.zip` file from the [Install](https://github.com/Lightstreamer/Lightstreamer-example-MPNStocklist-adapter-java#install) section above, you have two options:
+To build your own version of `example-MPNStockList-adapter-java-0.0.1-SNAPSHOT.jar` instead of using the one provided in the `deploy.zip` file from the [Install](https://github.com/Lightstreamer/Lightstreamer-example-MPNStockListMetadata-adapter-java#install) section above, you have two options:
 either use [Maven](https://maven.apache.org/) (or other build tools) to take care of dependencies and building (recommended) or gather the necessary jars yourself and build it manually.
 For the sake of simplicity only the Maven case is detailed here.
 
