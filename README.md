@@ -15,7 +15,7 @@ The MPN Stock-List Metadata Adapter is comprised of one Java class.
 
 #### MPNStockQuotesMetadataAdapter
 
-Implements the MetadataProvider interface to handle the communication with Lightstreamer Kernel, and extends the [LiteralBasedProvider](https://github.com/Lightstreamer/Lightstreamer-example-ReusableMetadata-adapter-java). The code shows a few best practices to ensure safety of Mobile Push Notifications (MPN) activity.
+Implements the MetadataProvider interface to handle the communication with Lightstreamer Kernel, and extends the [LiteralBasedProvider](https://github.com/Lightstreamer/Lightstreamer-lib-adapter-java-inprocess#literalbasedprovider-metadata-adapter). The code shows a few best practices to ensure safety of Mobile Push Notifications (MPN) activity.
 
 See the source code comments for further details.
 
@@ -286,7 +286,7 @@ Assuming Maven is installed and available in your path you can build the demo by
 
 ### Related Projects
 
-* [Lightstreamer - Reusable Metadata Adapters - Java Adapter](https://github.com/Lightstreamer/Lightstreamer-example-ReusableMetadata-adapter-java)
+* [LiteralBasedProvider Metadata Adapter](https://github.com/Lightstreamer/Lightstreamer-lib-adapter-java-inprocess#literalbasedprovider-metadata-adapter)
 * [Lightstreamer - Stock-List Demo - Java Adapter](https://github.com/Lightstreamer/Lightstreamer-example-StockList-adapter-java)
 
 ## Lightstreamer Compatibility Notes
