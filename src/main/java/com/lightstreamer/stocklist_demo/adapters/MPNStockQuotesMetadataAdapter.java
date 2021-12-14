@@ -14,7 +14,7 @@
   limitations under the License.
 */
 
-package stocklist_demo.adapters;
+package com.lightstreamer.stocklist_demo.adapters;
 
 import java.io.File;
 import java.util.Map;
