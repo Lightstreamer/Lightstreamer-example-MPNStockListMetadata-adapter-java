@@ -155,13 +155,7 @@ public class MPNStockQuotesMetadataAdapter extends LiteralBasedProvider {
             throw new NotificationException("Unexpected error on item names");
         }
         
-        String[] itemNames;
-        try {
-            itemNames= getItems(user, sessionID, table.getId());
-
-        } catch (ItemsException e) {
-            throw new NotificationException("Unexpected error on item names");
-        }
+        String[] itemNames = table.getSubscribedItems();
 
         for (String itemName : itemNames) {
             if (!itemName.startsWith("item")) {
