@@ -235,8 +235,6 @@ With this premise, follow these steps:
 * open the `js/lsClient.js` file of the specific demo you are configuring (basic or standard);
   * search this line and set the IP address of your Lightstreamer Server:
       * `var lsClient= new LightstreamerClient(protocolToUse+"//localhost:"+portToUse,"DEMO");`
-* get the `lightstreamer.min.js` file from [npm](https://www.npmjs.com/package/lightstreamer-client-web) or [unpkg](https://unpkg.com/lightstreamer-client-web/lightstreamer.min.js) and put it in the `src/[demo_name]/js` folder of the demo (if that is the case, please create it);
-* get the `require.js` file form [requirejs.org](http://requirejs.org/docs/download.html) and put it in the `src/[demo_name]/js` folder of the demo.
 
 You can deploy these demos to use the Lightstreamer server as web server or in any external web server you are running. If you choose the former case, please create the folders `<LS_HOME>/pages/[demo_name]` then copy here the contents of the `src` and `src/[demo_name]` folders of this project.
 
