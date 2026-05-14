@@ -62,7 +62,7 @@ The `adapters.xml` file for the Stock-List Demo, should look like:
     </metadata_provider>
 
     <!-- Mandatory. Define the Data Adapter. -->
-    <data_provider name="STOCKLIST_ADAPTER">
+    <data_provider name="QUOTE_ADAPTER">
 
         <!-- Mandatory. Java class name of the adapter. -->
         <adapter_class>stocklist_demo.adapters.StockQuotesDataAdapter</adapter_class>
