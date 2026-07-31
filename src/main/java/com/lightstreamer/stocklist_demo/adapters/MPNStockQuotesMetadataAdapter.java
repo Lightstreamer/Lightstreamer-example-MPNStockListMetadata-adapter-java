@@ -17,30 +17,33 @@
 package com.lightstreamer.stocklist_demo.adapters;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.lightstreamer.adapters.metadata.LiteralBasedProvider;
-import com.lightstreamer.interfaces.metadata.CreditsException;
-import com.lightstreamer.interfaces.metadata.ItemsException;
-import com.lightstreamer.interfaces.metadata.MetadataProviderException;
-import com.lightstreamer.interfaces.metadata.MpnDeviceInfo;
-import com.lightstreamer.interfaces.metadata.MpnPlatformType;
-import com.lightstreamer.interfaces.metadata.MpnSubscriptionInfo;
-import com.lightstreamer.interfaces.metadata.NotificationException;
-import com.lightstreamer.interfaces.metadata.TableInfo;
+import com.lightstreamer.adapter.common.InitException;
+import com.lightstreamer.adapter.metadata.CreditsException;
+import com.lightstreamer.adapter.metadata.ItemsException;
+import com.lightstreamer.adapter.metadata.LoginInfo;
+import com.lightstreamer.adapter.metadata.MetadataAdapter;
+import com.lightstreamer.adapter.metadata.SessionListener;
+import com.lightstreamer.adapter.metadata.SessionRequestHandler;
+import com.lightstreamer.adapter.metadata.SubscriptionHandler;
+import com.lightstreamer.adapter.metadata.SubscriptionInfo;
+import com.lightstreamer.adapter.metadata.mpn.MPNActivationHandler;
+import com.lightstreamer.adapter.metadata.mpn.MPNActivationInfo;
+import com.lightstreamer.adapter.metadata.mpn.MPNDataException;
+import com.lightstreamer.adapter.metadata.mpn.MPNDeviceInfo;
+import com.lightstreamer.adapter.metadata.mpn.MPNPlatformType;
+import com.lightstreamer.adapter.metadata.mpn.MPNSubscriptionInfo;
 
-public class MPNStockQuotesMetadataAdapter extends LiteralBasedProvider {
-
-    /**
-     * Keeps the client context information supplied by Lightstreamer
-     * on the new session notifications.
-     * Session information is used when logging MPN subscription activations.
-     */
-    private ConcurrentHashMap<String,Map<String,String>> sessions = new ConcurrentHashMap<String,Map<String,String>>();
+public class MPNStockQuotesMetadataAdapter implements MetadataAdapter {
 
     /**
      * Used as a Set, to keep unique identifiers for the currently connected
@@ -51,7 +54,7 @@ public class MPNStockQuotesMetadataAdapter extends LiteralBasedProvider {
      * the user agent. This set lists the concatenations of the current
      * IP and user agent pairs, to help determining uniqueness.
      */
-    private ConcurrentHashMap<String,Object> uaIpPairs = new ConcurrentHashMap<String,Object>();
+    private final ConcurrentHashMap<String,Object> uaIpPairs = new ConcurrentHashMap<String,Object>();
     
     /**
      * Private logger; a specific "LS_demos_Logger.StockQuotesMetadata" category
@@ -66,13 +69,9 @@ public class MPNStockQuotesMetadataAdapter extends LiteralBasedProvider {
     public MPNStockQuotesMetadataAdapter() {}
     
     @Override
-    @SuppressWarnings("rawtypes") 
-    public void init(Map params, File configDir)
-            throws MetadataProviderException {
+    public void init(Map<String, String> params, File configDir)
+            throws InitException {
         
-        // Call super's init method to handle basic Metadata Adapter features
-        super.init(params, configDir);
-
         /*
         String logConfig = (String) params.get("log_config");
         if (logConfig != null) {
@@ -89,166 +88,183 @@ public class MPNStockQuotesMetadataAdapter extends LiteralBasedProvider {
         logger.info("StockQuotesMetadataAdapter ready");
     }
     
+    @Override
+    public void shutdown() {
+    }
 
     /////////////////////////////////////////////////////////////////////////
-    // Session management
+    // Login and session management
 
     @Override
-    @SuppressWarnings({ "rawtypes", "unchecked" }) 
-    public void notifyNewSession(String user, String session, Map clientContext)
-        throws CreditsException, NotificationException {
+    public CompletionStage<SessionRequestHandler> loginAsync(LoginInfo loginInfo) {
+        //////////////////////////////////////////////////////////////////////////
+        // WARNING: This demo adapter performs no authentication.
+        // In a production environment, validate credentials here.
+        //////////////////////////////////////////////////////////////////////////
+        Map<String, String> clientContext = new HashMap<>(loginInfo.getClientContext());
 
-        // We can't have duplicate sessions
-        assert(!sessions.containsKey(session));
+        return CompletableFuture.completedFuture(new SessionRequestHandler() {
 
-        /* If needed, modify the user agent and store it directly
-         * in the session infos object, for logging support.
-         * Note: we are free to change and store the received object.
-         */
-        uniquelyIdentifyClient(clientContext);
-
-        // Register the session details on the sessions HashMap,
-        // for Chat and Monitor support.
-        sessions.put(session, clientContext);
-    }
-
-    @Override
-    public void notifySessionClose(String session) throws NotificationException {
-
-        // The session must exist to be closed
-        assert(sessions.containsKey(session));
-
-        // We have to remove session information from the session HashMap
-        // and from the pairs "Set"
-        Map<String,String> sessionInfo = sessions.get(session);
-        String ua = sessionInfo.get("USER_AGENT");
-        String IP =  sessionInfo.get("REMOTE_IP");
-
-        uaIpPairs.remove(IP+" "+ua);
-        sessions.remove(session);
-    }
-    
-    
-    /////////////////////////////////////////////////////////////////////////
-    // Mobile push notifications management
-    
-    @Override
-    public void notifyMpnDeviceAccess(String user, String sessionID, MpnDeviceInfo device)
-            throws CreditsException, NotificationException {
-        // Authorize all devices
-    }
-    
-    @Override
-    public void notifyMpnSubscriptionActivation(String user, String sessionID, TableInfo table, MpnSubscriptionInfo mpnSubscription)
-            throws CreditsException, NotificationException {
-
-        // We suppose someone may try to communicate with the Server directly, through
-        // the TLCP protocol, and force it to send unexpected or unwanted push notifications.
-        // They could try to change both the items and the format of legit push notifications,
-        // but could not change the app name, as it is checked by the Server during subscription.
-        // Hence notifications may only be delivered to the legit app. They could not even change 
-        // the trigger expression, as it is filtered by the Server using the regular expression
-        // list specified in configuration files.
-        
-        // Check the item name, should be one of those supported by the StockList Data Adapter 
-        if (table.getId() == null) {
-            throw new NotificationException("Unexpected error on item names");
-        }
-        
-        String[] itemNames = table.getSubscribedItems();
-
-        for (String itemName : itemNames) {
-            if (!itemName.startsWith("item")) {
-                throw new CreditsException(-102, "Invalid item argument for push notifications");
-            }
-        }
-        
-        // Check the platform type
-        if (mpnSubscription.getDevice().getType().getName().equals(MpnPlatformType.Apple.getName())) {
-
-            // Here, we can add APNS-related checks, by inspecting the JSON string returned by:
-            // mpnSubscription.getNotificationFormat()
-            
-            // Authorized, log it
-            doLog(logger, sessionID, "Authorized APNS subscription with parameters:\n" + 
-                    ((table.getId() != null) ? "\tgroup: " + table.getId() + "\n" : "") +
-                    ((itemNames != null) && (itemNames.length > 0) ? "\titems: " + itemNames + "\n" : "") +
-                    ((table.getSchema() != null) ? "\tschema: " + table.getSchema() + "\n" : "") +
-                    ((mpnSubscription.getTrigger() != null) ? "\ttrigger expression: " + mpnSubscription.getTrigger() + "\n" : "") +
-                    ((mpnSubscription.getNotificationFormat() != null) ? "\tformat: " + mpnSubscription.getNotificationFormat() + "\n" : ""));
-                    // Here, we can add custom APNS log, by inspecting the JSON string returned by:
-                    // mpnSubscription.getNotificationFormat()
-        
-        } else if (mpnSubscription.getDevice().getType().getName().equals(MpnPlatformType.Google.getName())) {
-
-            // Here, we can add FCM-related checks, by inspecting the JSON string returned by:
-            // mpnSubscription.getNotificationFormat()
-            
-            // Authorized, log it
-            doLog(logger, sessionID, "Authorized FCM subscription with parameters:\n" + 
-                    ((table.getId() != null) ? "\tgroup: " + table.getId() + "\n" : "") +
-                    ((itemNames != null) && (itemNames.length > 0) ? "\titems: " + itemNames + "\n" : "") +
-                    ((table.getSchema() != null) ? "\tschema: " + table.getSchema() + "\n" : "") +
-                    ((mpnSubscription.getTrigger() != null) ? "\ttrigger expression: " + mpnSubscription.getTrigger() + "\n" : "") +
-                    ((mpnSubscription.getNotificationFormat() != null) ? "\tformat: " + mpnSubscription.getNotificationFormat() + "\n" : ""));
-                    // Here, we can add custom FCM log, by inspecting the JSON string returned by:
-                    // mpnSubscription.getNotificationFormat()
-            
-        } else {
-            throw new CreditsException(-103, "Invalid platform argument for push notifications");
-        }
-    }
-    
-    @Override
-    public void notifyMpnDeviceTokenChange(String user, String sessionID, MpnDeviceInfo device, String newDeviceToken)
-            throws CreditsException, NotificationException {
-        // Authorize all token changes
-    }
-    
-    
-    /////////////////////////////////////////////////////////////////////////
-    // Internals
-
-    /**
-     * Modifies the clientContext to provide a unique identification
-     * for the client session, for Chat support.
-     */
-    @SuppressWarnings({ "unchecked", "rawtypes" }) 
-    private void uniquelyIdentifyClient(Map clientContext) {
-
-        // Extract user agent and ip from session infos
-        String ua = (String) clientContext.get("USER_AGENT");
-        String ip = (String) clientContext.get("REMOTE_IP");
-
-        /*
-         * we need to ensure that each pair IP-User Agent is unique so that
-         * the sender can be identified on the client, if such pair is not
-         * unique we add a counter on the user agent string
-         */
-
-        String count = "";
-        int c = 0;
-        
-        // Synchronize to ensure that we do not generate two identical pairs
-        synchronized(uaIpPairs) {
-            while (uaIpPairs.containsKey(ip+" "+ua+" "+count)) {
-                c++;
-                count = "["+c+"]";
+            @Override
+            public void onStart(SessionListener listener) {
+                /* If needed, modify the user agent and store it directly
+                 * in the session infos object, for logging support.
+                 * Note: we are free to change and store the received object.
+                 */
+                uniquelyIdentifyClient(clientContext);
             }
 
-            ua = ua+" "+count;
+            @Override
+            public void onClose() {
 
-            uaIpPairs.put(ip+" "+ua,new Object());
+                // We have to remove session information from the pairs "Set"
+                String ua = clientContext.get("USER_AGENT");
+                String IP =  clientContext.get("REMOTE_IP");
+
+                uaIpPairs.remove(IP+" "+ua);
+            }
+
+            @Override
+            public CompletionStage<SubscriptionHandler> newSubscription(SubscriptionInfo info) {
+                return CompletableFuture.completedFuture(new SubscriptionHandler(info));
+            }
+
+            @Override
+            public CompletionStage<String> userMessageAsync(String message) throws CreditsException {
+                throw new CreditsException(0, "Unsupported feature");
+            }
+
+            @Override
+            public CompletionStage<Void> notifyMpnDeviceAccess(MPNDeviceInfo info)
+                    throws CreditsException, MPNDataException {
+                // Authorize all devices
+                return CompletableFuture.completedFuture(null);
+            }
+
+            @Override
+            public CompletionStage<MPNActivationHandler> newMPNActivation(MPNActivationInfo info)
+                    throws CreditsException, ItemsException {
+
+                // We suppose someone may try to communicate with the Server directly, through
+                // the TLCP protocol, and force it to send unexpected or unwanted push notifications.
+                // They could try to change both the items and the format of legit push notifications,
+                // but could not change the app name, as it is checked by the Server during subscription.
+                // Hence notifications may only be delivered to the legit app. They could not even change 
+                // the trigger expression, as it is filtered by the Server using the regular expression
+                // list specified in configuration files.
+                
+                // Check the item name, should be one of those supported by the StockList Data Adapter 
+                List<String> itemNames = info.getItemRefs();
+                if (itemNames == null || itemNames.isEmpty()) {
+                    throw new ItemsException("Unexpected error on item names");
+                }
+
+                for (String itemName : itemNames) {
+                    if (!itemName.startsWith("item")) {
+                        throw new CreditsException(-102, "Invalid item argument for push notifications");
+                    }
+                }
+
+                return CompletableFuture.completedFuture(
+                    new StockMPNActivationHandler(info, clientContext));
+            }
+
+            @Override
+            public CompletionStage<Void> notifyMpnDeviceTokenChange(MPNDeviceInfo info, String newToken)
+                    throws CreditsException, MPNDataException {
+                // Authorize all token changes
+                return CompletableFuture.completedFuture(null);
+            }
+
+            /**
+             * Modifies the clientContext to provide a unique identification
+             * for the client session, for Chat support.
+             */
+            private void uniquelyIdentifyClient(Map<String,String> clientContext) {
+
+                // Extract user agent and ip from session infos
+                String ua = clientContext.get("USER_AGENT");
+                String ip = clientContext.get("REMOTE_IP");
+
+                /*
+                 * we need to ensure that each pair IP-User Agent is unique so that
+                 * the sender can be identified on the client, if such pair is not
+                 * unique we add a counter on the user agent string
+                 */
+
+                String count = "";
+                int c = 0;
+                
+                // Synchronize to ensure that we do not generate two identical pairs
+                synchronized(uaIpPairs) {
+                    while (uaIpPairs.containsKey(ip+" "+ua+" "+count)) {
+                        c++;
+                        count = "["+c+"]";
+                    }
+
+                    ua = ua+" "+count;
+
+                    uaIpPairs.put(ip+" "+ua,new Object());
+                }
+
+                clientContext.put("USER_AGENT", ua);
+            }
+
+        });
+    }
+
+    private class StockMPNActivationHandler extends MPNActivationHandler {
+        private final Map<String, String> clientContext;
+
+        StockMPNActivationHandler(MPNActivationInfo info, Map<String, String> clientContext) {
+            super(info);
+            this.clientContext = clientContext;
         }
 
-        clientContext.put("USER_AGENT", ua);
-    }
-    
-    private void doLog(Logger logger, String session, String msg) {
-        if (logger != null) {
-            Map<String,String> sessionInfo = sessions.get(session);
-            String IP =  sessionInfo.get("REMOTE_IP");
-            logger.info(msg + "\tfrom " + IP);
+        @Override
+        public CompletionStage<Void> notifyMpnSubscriptionActivation(MPNSubscriptionInfo mpnSubscription)
+                throws CreditsException, MPNDataException {
+
+            // Check the platform type
+            MPNDeviceInfo device = mpnSubscription.getDevice();
+            if (device.getType() == MPNPlatformType.APPLE) {
+
+                // Here, we can add APNS-related checks, by inspecting the JSON string returned by:
+                // mpnSubscription.getNotificationFormat()
+                
+                // Authorized, log it
+                doLog("Authorized APNS subscription with parameters:\n" + 
+                        "\titems: " + getActivationInfo().getItemRefs() + "\n" +
+                        "\tfields: " + getActivationInfo().getFieldRefs() + "\n" +
+                        ((mpnSubscription.getTrigger() != null) ? "\ttrigger expression: " + mpnSubscription.getTrigger() + "\n" : "") +
+                        ((mpnSubscription.getNotificationFormat() != null) ? "\tformat: " + mpnSubscription.getNotificationFormat() + "\n" : ""));
+                        // Here, we can add custom APNS log, by inspecting the JSON string returned by:
+                        // mpnSubscription.getNotificationFormat()
+            
+            } else if (device.getType() == MPNPlatformType.GOOGLE) {
+
+                // Here, we can add FCM-related checks, by inspecting the JSON string returned by:
+                // mpnSubscription.getNotificationFormat()
+                
+                // Authorized, log it
+                doLog("Authorized FCM subscription with parameters:\n" + 
+                        "\titems: " + getActivationInfo().getItemRefs() + "\n" +
+                        "\tfields: " + getActivationInfo().getFieldRefs() + "\n" +
+                        ((mpnSubscription.getTrigger() != null) ? "\ttrigger expression: " + mpnSubscription.getTrigger() + "\n" : "") +
+                        ((mpnSubscription.getNotificationFormat() != null) ? "\tformat: " + mpnSubscription.getNotificationFormat() + "\n" : ""));
+                        // Here, we can add custom FCM log, by inspecting the JSON string returned by:
+                        // mpnSubscription.getNotificationFormat()
+                
+            } else {
+                throw new CreditsException(-103, "Invalid platform argument for push notifications");
+            }
+            return CompletableFuture.completedFuture(null);
+        }
+
+        private void doLog(String msg) {
+            if (logger != null) {
+                logger.info(msg + "\tfrom " + clientContext.get("REMOTE_IP"));
+            }
         }
     }
 }

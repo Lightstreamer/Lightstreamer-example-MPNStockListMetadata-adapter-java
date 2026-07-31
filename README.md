@@ -15,7 +15,7 @@ The MPN Stock-List Metadata Adapter is comprised of one Java class.
 
 #### MPNStockQuotesMetadataAdapter
 
-Implements the MetadataProvider interface to handle the communication with Lightstreamer Kernel, and extends the [LiteralBasedProvider](https://github.com/Lightstreamer/Lightstreamer-lib-adapter-java-inprocess#literalbasedprovider-metadata-adapter). The code shows a few best practices to ensure safety of Mobile Push Notifications (MPN) activity.
+Implements the `MetadataAdapter` interface to handle the communication with Lightstreamer Kernel. The code shows a few best practices to ensure safety of Mobile Push Notifications (MPN) activity.
 
 See the source code comments for further details.
 
@@ -43,21 +43,8 @@ The `adapters.xml` file for the Stock-List Demo, should look like:
         <!-- Mandatory. Java class name of the adapter. -->
         <adapter_class>stocklist_demo.adapters.metadata.MPNStockQuotesMetadataAdapter</adapter_class>
 
-        <!-- Optional.
-             See LiteralBasedProvider javadoc. -->
-        <!--
-        <param name="max_bandwidth">40</param>
-        <param name="max_frequency">3</param>
-        <param name="buffer_size">30</param>
-        <param name="distinct_snapshot_length">10</param>
-        <param name="prefilter_frequency">5</param>
-        <param name="allowed_users">user123,user456</param>
-        -->
-
-        <!-- Optional.
-             See LiteralBasedProvider javadoc. -->
-        <param name="item_family_1">item.*</param>
-        <param name="modes_for_item_family_1">MERGE</param>
+        <!-- Ensure compatibility with old versions of the demo Clients. -->
+        <support_LiteralBased_subscriptions>Y</support_LiteralBased_subscriptions>
 
     </metadata_provider>
 
@@ -81,13 +68,14 @@ Please refer to the [*General Concepts* document](https://lightstreamer.com/docs
 
 If you want to install a version of the *MPN Stock-List Demo* in your local Lightstreamer Server, follow these steps:
 
-* Download *Lightstreamer Server Version 7.1 or greater* (Lightstreamer Server comes with a free non-expiring demo license for 20 connected users) from [Lightstreamer Download page](http://www.lightstreamer.com/download.htm), and install it, as explained in the `GETTING_STARTED.TXT` file in the installation home directory.
+* Download *Lightstreamer Server* (Lightstreamer Server comes with a free non-expiring demo license for 20 connected users) from [Lightstreamer Download page](http://www.lightstreamer.com/download.htm), and install it, as explained in the `GETTING_STARTED.TXT` file in the installation home directory.
 * Make sure that Lightstreamer Server is not running.
 
 ### Installing the Adapter
 
 * Get the `deploy.zip` file of the [Metadata Adapter latest release](https://github.com/Lightstreamer/Lightstreamer-example-MPNStockListMetadata-adapter-java/releases), unzip it, and copy the `StockList` folder into the `adapters` folder of your Lightstreamer Server installation.
-* Get the `deploy.zip` file of the [Data Adapter latest release](https://github.com/Lightstreamer/Lightstreamer-example-StockList-adapter-java/releases), unzip it, and copy the content of `StockList/lib` folder into the `adapters/StockList/lib` folder of your Lightstreamer Server installation (ignore duplicates).
+
+This deployment also includes a suitable version of the Stock-List Demo Data Adapter.
 
 ### Enabling the MPN Module
 
@@ -257,7 +245,7 @@ If everything is correct, you should receive the push notification within a few 
 ## Build
 
 
-To build your own version of `example-MPNStockList-adapter-java-0.0.1-SNAPSHOT.jar` instead of using the one provided in the `deploy.zip` file from the [Install](https://github.com/Lightstreamer/Lightstreamer-example-MPNStockListMetadata-adapter-java#install) section above, you have two options:
+To build your own version of `example-MPNStockList-adapter-java-x.y.z.jar` instead of using the one provided in the `deploy.zip` file from the [Install](https://github.com/Lightstreamer/Lightstreamer-example-MPNStockListMetadata-adapter-java#install) section above, you have two options:
 either use [Maven](https://maven.apache.org/) (or other build tools) to take care of dependencies and building (recommended) or gather the necessary jars yourself and build it manually.
 For the sake of simplicity only the Maven case is detailed here.
 
@@ -269,6 +257,8 @@ Assuming Maven is installed and available in your path you can build the demo by
 ```sh 
  mvn install dependency:copy-dependencies 
 ```
+
+This will not build the Data Adapter. The Data Adapter jar should be taken from the [Lightstreamer - Stock-List Demo - Java Adapter](https://github.com/Lightstreamer/Lightstreamer-example-StockList-adapter-java) project.
 
 ## See Also
 
@@ -284,12 +274,13 @@ Assuming Maven is installed and available in your path you can build the demo by
 
 ### Related Projects
 
-* [LiteralBasedProvider Metadata Adapter](https://github.com/Lightstreamer/Lightstreamer-lib-adapter-java-inprocess#literalbasedprovider-metadata-adapter)
 * [Lightstreamer - Stock-List Demo - Java Adapter](https://github.com/Lightstreamer/Lightstreamer-example-StockList-adapter-java)
 
 ## Lightstreamer Compatibility Notes
 
-- Compatible with Lightstreamer SDK for Java In-Process Adapters since 7.3.
+- Compatible with Lightstreamer SDK for Java In-Process Adapters since version 9.0.
+- For a version of this example compatible with Lightstreamer SDK for Java In-Process Adapters versions 8.x, please refer to [this tag](https://github.com/Lightstreamer/Lightstreamer-example-MPNStockListMetadata-adapter-java/tree/XXXXXXXXXXXXXXXXXXXXX).
+- For an example compatible with Lightstreamer SDK for Java Adapters version 6.x, please refer to [this tag](https://github.com/Lightstreamer/Lightstreamer-example-MPNStockListMetadata-adapter-java/tree/for-server-6).
+
 - Configuration instructions compatible with Lightstreamer Server since version 7.1
 - For an example compatible with Lightstreamer Server version 7.0.x, please refer to [this tag](https://github.com/Lightstreamer/Lightstreamer-example-MPNStockListMetadata-adapter-java/tree/for-server-7.0).
-- For an example compatible with Lightstreamer SDK for Java Adapters version 6.x, please refer to [this tag](https://github.com/Lightstreamer/Lightstreamer-example-MPNStockListMetadata-adapter-java/tree/for-server-6).
